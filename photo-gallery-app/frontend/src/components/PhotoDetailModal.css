@@ -1,0 +1,724 @@
+/* Photo Detail Lightbox Modal Styles */
+.photo-detail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 32px);
+  background: rgba(8, 10, 8, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: overlay-fade-in 0.25s ease-out;
+  overflow-y: auto;
+}
+
+@keyframes overlay-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.photo-detail-modal {
+  position: relative;
+  width: min(100%, 1160px);
+  max-height: min(94vh, 920px);
+  display: flex;
+  flex-direction: column;
+  background: #141613;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(199, 122, 98, 0.15);
+  animation: modal-scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  color: #f3f1e9;
+}
+
+/* Modal Top Bar */
+.pdm-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: rgba(22, 25, 20, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pdm-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pdm-category-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(199, 122, 98, 0.18);
+  border: 1px solid rgba(199, 122, 98, 0.4);
+  color: #e0a18b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pdm-counter {
+  color: #8b8f84;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.pdm-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdm-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #d0d3c9;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.pdm-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(199, 122, 98, 0.5);
+  color: #fff;
+}
+
+.pdm-icon-btn.is-favorite {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.pdm-close-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.pdm-close-btn:hover {
+  background: #c77a62;
+  color: #111310;
+  border-color: #c77a62;
+  transform: rotate(90deg);
+}
+
+/* Modal Body: Split view */
+.pdm-body {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Image Stage */
+.pdm-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0c0e0b;
+  overflow: hidden;
+  user-select: none;
+}
+
+.pdm-stage-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.pdm-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+  cursor: zoom-in;
+}
+
+.pdm-image.is-zoomed {
+  transform: scale(1.35);
+  cursor: zoom-out;
+}
+
+/* Stage Nav Arrows */
+.pdm-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(17, 19, 16, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.pdm-nav-btn:hover {
+  background: #c77a62;
+  color: #111310;
+  border-color: #c77a62;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.pdm-nav-prev { left: 16px; }
+.pdm-nav-next { right: 16px; }
+
+/* Stage floating hint */
+.pdm-stage-hint {
+  position: absolute;
+  bottom: 14px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(15, 17, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a0a498;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+/* Info Sidebar */
+.pdm-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  background: #141613;
+}
+
+.pdm-info-panel::-webkit-scrollbar {
+  width: 6px;
+}
+.pdm-info-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+/* Title & Header */
+.pdm-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 14px;
+}
+
+.pdm-header-eyebrow {
+  margin: 0 0 6px;
+  color: #d9947e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.pdm-title {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #f3f1e9;
+}
+
+/* "Kya Chiz Ka Photo Hai" Description Section */
+.pdm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pdm-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #fbbf24;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.pdm-section-title::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: #fbbf24;
+}
+
+.pdm-description-box {
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #d9947e;
+}
+
+.pdm-description-text {
+  margin: 0;
+  color: #d5d8cd;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* "Kis Ne Liya Hai" Photographer Profile Card */
+.pdm-author-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pdm-author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c77a62, #e0a18b);
+  color: #111310;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 20px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(199, 122, 98, 0.3);
+}
+
+.pdm-author-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pdm-author-name {
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pdm-author-role {
+  margin: 0;
+  color: #9da195;
+  font-size: 11px;
+}
+
+.pdm-author-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdm-author-shots {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 12px;
+  background: rgba(199, 122, 98, 0.15);
+  color: #e0a18b;
+  border: 1px solid rgba(199, 122, 98, 0.3);
+}
+
+.pdm-author-badges-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.pdm-author-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #86efac;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.pdm-author-badge-gear {
+  color: #fbbf24;
+}
+
+/* Download Dropdown */
+.pdm-download-dropdown-wrap {
+  position: relative;
+}
+
+.pdm-download-trigger {
+  gap: 6px;
+}
+
+.pdm-dropdown-chevron {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.pdm-download-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 250px;
+  background: rgba(18, 20, 16, 0.98);
+  border: 1px solid rgba(199, 122, 98, 0.35);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: pdm-fade 0.2s ease-out;
+}
+
+@keyframes pdm-fade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pdm-download-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.pdm-download-opt:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(199, 122, 98, 0.4);
+}
+
+.pdm-opt-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pdm-opt-label {
+  color: #f7f6f0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pdm-opt-meta {
+  color: #8b8f84;
+  font-size: 10px;
+}
+
+.pdm-opt-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: #c77a62;
+  color: #111310;
+  letter-spacing: 0.3px;
+}
+
+.pdm-opt-badge.pdm-badge-web {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd0c3;
+}
+
+
+/* Metadata & EXIF Gear Grid */
+.pdm-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.pdm-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pdm-meta-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #8f9387;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pdm-meta-value {
+  color: #e8eae1;
+  font-size: 12px;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Tags List */
+.pdm-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.pdm-tag {
+  padding: 4px 9px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #b8bcb1;
+  font-size: 11px;
+}
+
+/* Action Bar inside Sidebar */
+.pdm-action-bar {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pdm-btn-primary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #c77a62;
+  color: #111310;
+  border: 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pdm-btn-primary:hover {
+  background: #d9947e;
+  transform: translateY(-1px);
+}
+
+.pdm-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e5e8de;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pdm-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #c77a62;
+}
+
+/* Toast Notification */
+.pdm-toast {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #10b981;
+  color: #064e3b;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: toast-pop 0.25s ease-out;
+}
+
+@keyframes toast-pop {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Related Photos Carousel at Modal Footer */
+.pdm-related {
+  padding: 14px 22px 18px;
+  background: #111310;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pdm-related-heading {
+  margin: 0 0 10px;
+  color: #929689;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.pdm-related-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.pdm-related-item {
+  position: relative;
+  flex: 0 0 92px;
+  height: 64px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1e211a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pdm-related-item:hover {
+  border-color: #c77a62;
+  transform: translateY(-2px);
+}
+
+.pdm-related-item.is-current {
+  border: 2px solid #c77a62;
+  box-shadow: 0 0 10px rgba(199, 122, 98, 0.4);
+}
+
+.pdm-related-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pdm-related-item span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2px 4px;
+  background: rgba(17, 19, 16, 0.85);
+  color: #fff;
+  font-size: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .pdm-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .pdm-stage-wrapper {
+    max-height: 44vh;
+  }
+  .pdm-info-panel {
+    overflow-y: visible;
+  }
+  .photo-detail-modal {
+    max-height: 96vh;
+  }
+}
+
+@media (max-width: 580px) {
+  .photo-detail-overlay {
+    padding: 6px;
+  }
+  .photo-detail-modal {
+    border-radius: 12px;
+  }
+  .pdm-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  .pdm-title {
+    font-size: 24px;
+  }
+  .pdm-topbar {
+    padding: 10px 14px;
+  }
+  .pdm-info-panel {
+    padding: 16px;
+  }
+  .pdm-action-bar {
+    flex-wrap: wrap;
+  }
+}

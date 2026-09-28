@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../api";
+import PhotoDetailModal from "../components/PhotoDetailModal";
 
 const Profile = () => {
   const { user, logout } = useAuth();
@@ -9,6 +10,7 @@ const Profile = () => {
   const [photos, setPhotos] = useState([]);
   const [loadingPhotos, setLoadingPhotos] = useState(true);
   const [photoError, setPhotoError] = useState("");
+  const [activeModalPhoto, setActiveModalPhoto] = useState(null);
 
   useEffect(() => {
     api.getMyPhotos(user.token)
@@ -71,7 +73,15 @@ const Profile = () => {
           )}
           <div style={styles.photoGrid}>
             {photos.map((photo) => (
-              <article key={photo.id} style={styles.photoItem}>
+              <article
+                key={photo.id}
+                style={{ ...styles.photoItem, cursor: "pointer" }}
+                onClick={() => setActiveModalPhoto(photo)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setActiveModalPhoto(photo); }}
+                title="Click to view details"
+              >
                 <img src={photo.url} alt={photo.title} style={styles.photoImage} />
                 <div style={styles.photoMeta}>
                   <strong style={styles.photoTitle}>{photo.title}</strong>
@@ -84,6 +94,15 @@ const Profile = () => {
           </div>
         </div>
       </section>
+
+      {activeModalPhoto && (
+        <PhotoDetailModal
+          photo={activeModalPhoto}
+          photos={photos}
+          onClose={() => setActiveModalPhoto(null)}
+          onSelectPhoto={setActiveModalPhoto}
+        />
+      )}
     </main>
   );
 };

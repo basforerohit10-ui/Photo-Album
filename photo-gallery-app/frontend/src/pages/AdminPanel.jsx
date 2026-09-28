@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import PhotoDetailModal from "../components/PhotoDetailModal";
 
 const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) => {
+  const [activeModalPhoto, setActiveModalPhoto] = useState(null);
   const approvedPhotos = photos;
   const contributorCount = new Set(
     approvedPhotos.filter((photo) => photo.submittedBy).map((photo) => photo.submittedBy)
@@ -41,9 +43,19 @@ const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) =>
             ) : (
               pendingPhotos.map((photo) => (
                 <div key={photo.id} style={styles.photoRow}>
-                  <img src={photo.url} alt={photo.title} style={styles.thumb} />
-                  <div style={styles.photoMeta}>
-                    <strong>{photo.title}</strong>
+                  <img
+                    src={photo.url}
+                    alt={photo.title}
+                    style={{ ...styles.thumb, cursor: "pointer" }}
+                    onClick={() => setActiveModalPhoto(photo)}
+                    title="Click to inspect photo details"
+                  />
+                  <div
+                    style={{ ...styles.photoMeta, cursor: "pointer" }}
+                    onClick={() => setActiveModalPhoto(photo)}
+                    title="Click to inspect photo details"
+                  >
+                    <strong>{photo.title} ↗</strong>
                     <span>{photo.category}</span>
                     <small>Submitted by {photo.submittedBy}</small>
                   </div>
@@ -61,9 +73,19 @@ const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) =>
 
             {approvedPhotos.map((photo) => (
               <div key={photo.id} style={styles.photoRow}>
-                <img src={photo.url} alt={photo.title} style={styles.thumb} />
-                <div style={styles.photoMeta}>
-                  <strong>{photo.title}</strong>
+                <img
+                  src={photo.url}
+                  alt={photo.title}
+                  style={{ ...styles.thumb, cursor: "pointer" }}
+                  onClick={() => setActiveModalPhoto(photo)}
+                  title="Click to inspect photo details"
+                />
+                <div
+                  style={{ ...styles.photoMeta, cursor: "pointer" }}
+                  onClick={() => setActiveModalPhoto(photo)}
+                  title="Click to inspect photo details"
+                >
+                  <strong>{photo.title} ↗</strong>
                   <span>{photo.category}</span>
                   <small>Contributor: {photo.submittedBy}</small>
                 </div>
@@ -73,6 +95,15 @@ const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) =>
           </section>
         </div>
       </div>
+
+      {activeModalPhoto && (
+        <PhotoDetailModal
+          photo={activeModalPhoto}
+          photos={[...pendingPhotos, ...approvedPhotos]}
+          onClose={() => setActiveModalPhoto(null)}
+          onSelectPhoto={setActiveModalPhoto}
+        />
+      )}
     </main>
   );
 };

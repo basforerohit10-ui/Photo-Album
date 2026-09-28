@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
 import Navbar from "./components/Navbar";
 import SiteFooter from "./components/SiteFooter";
 import Gallery from "./pages/Gallery";
@@ -9,9 +10,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SubmitPhoto from "./pages/SubmitPhoto";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { api } from "./api";
 import { useAuth } from "./context/AuthContext";
+import { enrichPhotoWithDetails } from "./data/photoDetails";
 
 const INITIAL_PHOTOS = [
   {
@@ -130,16 +133,30 @@ const INITIAL_PHOTOS = [
 
 function AppContent() {
   const { user } = useAuth();
-  const [photos, setPhotos] = useState(INITIAL_PHOTOS);
+  const [photos, setPhotos] = useState(() => INITIAL_PHOTOS.map(enrichPhotoWithDetails));
   const [pendingPhotos, setPendingPhotos] = useState([]);
 
   useEffect(() => {
-    api.getPhotos().then(setPhotos).catch(() => {});
+    api.getPhotos()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setPhotos(data.map(enrichPhotoWithDetails));
+        }
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
     if (user?.role === "admin") {
-      api.getPendingPhotos(user.token).then(setPendingPhotos).catch(() => setPendingPhotos([]));
+      api.getPendingPhotos(user.token)
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setPendingPhotos(data.map(enrichPhotoWithDetails));
+          } else {
+            setPendingPhotos([]);
+          }
+        })
+        .catch(() => setPendingPhotos([]));
     }
   }, [user]);
 
@@ -147,7 +164,8 @@ function AppContent() {
 
   const approvePhoto = async (photo) => {
     const approvedPhoto = await api.approvePhoto(user.token, photo.id);
-    setPhotos((prev) => [approvedPhoto, ...prev]);
+    const enrichedApproved = enrichPhotoWithDetails(approvedPhoto);
+    setPhotos((prev) => [enrichedApproved, ...prev]);
     setPendingPhotos((prev) => prev.filter((item) => item.id !== photo.id));
   };
 
@@ -156,12 +174,13 @@ function AppContent() {
       throw new Error("You must be logged in to submit a photo.");
     }
     const createdPhoto = await api.submitPhoto(user.token, newPhoto);
+    const enrichedCreated = enrichPhotoWithDetails(createdPhoto);
     if (createdPhoto.status === "approved") {
-      setPhotos((prev) => [createdPhoto, ...prev]);
+      setPhotos((prev) => [enrichedCreated, ...prev]);
     } else if (user?.role === "admin") {
-      setPendingPhotos((prev) => [createdPhoto, ...prev]);
+      setPendingPhotos((prev) => [enrichedCreated, ...prev]);
     }
-    return createdPhoto;
+    return enrichedCreated;
   };
 
   const handleDeletePhoto = async (photo) => {
@@ -216,6 +235,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <SiteFooter />
       </div>
@@ -226,9 +246,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <ToastProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </ToastProvider>
     </AuthProvider>
   );
 }

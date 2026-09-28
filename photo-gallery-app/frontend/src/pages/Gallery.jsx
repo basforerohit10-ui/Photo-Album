@@ -1,132 +1,459 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PhotoCard from "../components/PhotoCard";
+import PhotoDetailModal from "../components/PhotoDetailModal";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+
+const TRENDING_TAGS = [
+  { label: "🏔️ Alpine", query: "Alpine" },
+  { label: "🗼 Tokyo", query: "Tokyo" },
+  { label: "🌅 Golden Hour", query: "Golden" },
+  { label: "🌲 Forest", query: "Forest" },
+  { label: "🏛️ Brutalism", query: "Concrete" },
+  { label: "🌊 Ocean", query: "Coast" },
+  { label: "📷 Sony", query: "Sony" },
+];
 
 const Gallery = ({ photos, setPhotos, onDeletePhoto }) => {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
+  const searchInputRef = useRef(null);
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [activeModalPhoto, setActiveModalPhoto] = useState(null);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [viewMode, setViewMode] = useState("grid");
+  const [sortBy, setSortBy] = useState("curated");
 
-  const categories = ["All", ...new Set(photos.map((photo) => photo.category))];
-  const contributorCount = new Set(photos.filter((photo) => photo.submittedBy).map((photo) => photo.submittedBy)).size;
-  const myContributionCount = user ? photos.filter((photo) => photo.submittedBy === user.username).length : 0;
+  // Keyboard shortcut listener: press "/" or "Ctrl+K" to focus search
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Don't trigger if user is already typing in an input/textarea
+      if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) {
+        return;
+      }
+      if (event.key === "/" || (event.key === "k" && (event.metaKey || event.ctrlKey))) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const categories = useMemo(() => {
+    return ["All", ...new Set(photos.map((photo) => photo.category))];
+  }, [photos]);
+
+  const categoryCounts = useMemo(() => {
+    const counts = { All: photos.length };
+    photos.forEach((photo) => {
+      counts[photo.category] = (counts[photo.category] || 0) + 1;
+    });
+    return counts;
+  }, [photos]);
+
+  const contributorCount = useMemo(() => {
+    return new Set(
+      photos.filter((photo) => photo.submittedBy).map((photo) => photo.submittedBy)
+    ).size;
+  }, [photos]);
+
+  const myContributionCount = user
+    ? photos.filter((photo) => photo.submittedBy === user.username).length
+    : 0;
 
   const handleToggleFavorite = (id) => {
     setPhotos((prev) =>
-      prev.map((photo) =>
-        photo.id === id ? { ...photo, isFavorite: !photo.isFavorite } : photo
-      )
+      prev.map((photo) => {
+        if (photo.id === id) {
+          const nextState = !photo.isFavorite;
+          showToast(
+            nextState
+              ? `♥ Added "${photo.title}" to favorites`
+              : `Removed "${photo.title}" from favorites`,
+            nextState ? "success" : "info"
+          );
+          return { ...photo, isFavorite: nextState };
+        }
+        return photo;
+      })
     );
   };
 
-  const filteredPhotos = photos
-    .filter((photo) => selectedCategory === "All" || photo.category === selectedCategory)
-    .filter((photo) => !onlyFavorites || photo.isFavorite)
-    .filter((photo) => `${photo.title} ${photo.author} ${photo.category}`.toLowerCase().includes(searchTerm.toLowerCase()));
-  const relatedPhotos = activeModalPhoto
-    ? photos.filter((photo) => photo.id !== activeModalPhoto.id && photo.category === activeModalPhoto.category).slice(0, 6)
-    : [];
+  // Comprehensive multi-attribute search filter
+  const filteredPhotos = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    const baseList = photos
+      .filter((photo) => selectedCategory === "All" || photo.category === selectedCategory)
+      .filter((photo) => !onlyFavorites || photo.isFavorite)
+      .filter((photo) => {
+        if (!term) return true;
+        const tagsStr = Array.isArray(photo.tags) ? photo.tags.join(" ") : "";
+        const searchableText = `${photo.title} ${photo.author || ""} ${photo.category} ${photo.location || ""} ${photo.camera || ""} ${photo.description || ""} ${tagsStr} ${photo.submittedBy || ""}`.toLowerCase();
+        return searchableText.includes(term);
+      });
+
+    if (sortBy === "popular") {
+      return [...baseList].sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0));
+    }
+    if (sortBy === "latest") {
+      return [...baseList].sort((a, b) => b.id - a.id);
+    }
+    return baseList;
+  }, [photos, selectedCategory, onlyFavorites, searchTerm, sortBy]);
+
+  // Featured hero photo
+  const featuredHeroPhoto = useMemo(() => {
+    return photos.find((p) => p.id === 1) || photos[0];
+  }, [photos]);
+
+  const isFiltered = Boolean(searchTerm || onlyFavorites || selectedCategory !== "All");
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("All");
+    setOnlyFavorites(false);
+  };
 
   return (
     <main className="gallery-page" id="top">
-      <section className="gallery-hero">
+      {/* Hero Section */}
+      <section className="gallery-hero" id="hero">
+        <div className="hero-ambient-glow" aria-hidden="true" />
+
         <div className="gallery-hero-copy">
-          <p className="eyebrow"><span className="eyebrow-mark" /> Photography by Rohit</p>
-          <h1>Places, people<br />and <em>passing light.</em></h1>
-          <p className="gallery-hero-intro">A personal collection of photographs from near and far.</p>
-          <a className="hero-link" href="#collection">View the photographs <span aria-hidden="true">↘</span></a>
+          <div className="hero-status-pill">
+            <span className="pulse-dot" />
+            <span>FINE ART PHOTOGRAPHY ARCHIVE</span>
+            <span className="pill-divider">•</span>
+            <span className="pill-edition">CURATED 2026</span>
+          </div>
+
+          <h1 className="hero-heading">
+            Places, people<br />
+            and <em>passing light.</em>
+          </h1>
+
+          <p className="gallery-hero-intro">
+            A handpicked exhibition of moments, quiet horizons, and human stories captured through the lens of dedicated creators across the globe.
+          </p>
+
+          <div className="hero-actions-row">
+            <a className="hero-link-btn" href="#collection">
+              <span>Explore Collection</span>
+              <span aria-hidden="true">↘</span>
+            </a>
+            <button
+              type="button"
+              className="hero-secondary-btn"
+              onClick={() => {
+                if (user) navigate("/submit");
+                else navigate("/login");
+              }}
+            >
+              <span>Submit a Shot</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+
+          <div className="hero-metrics-strip">
+            <div className="hero-metric-item">
+              <strong>{photos.length}+</strong>
+              <span>Curated Shots</span>
+            </div>
+            <div className="hero-metric-divider" />
+            <div className="hero-metric-item">
+              <strong>{contributorCount || 1}</strong>
+              <span>Global Creators</span>
+            </div>
+            <div className="hero-metric-divider" />
+            <div className="hero-metric-item">
+              <strong>100%</strong>
+              <span>Raw EXIF Details</span>
+            </div>
+          </div>
         </div>
-        <div className="gallery-hero-image" role="img" aria-label="Sunlight falling across a mountain lake">
-          <span className="hero-image-note">LANDSCAPE PHOTOGRAPHY</span>
-        </div>
+
+        {/* Featured Showcase Widget */}
+        {featuredHeroPhoto && (
+          <div
+            className="hero-showcase-card"
+            onClick={() => setActiveModalPhoto(featuredHeroPhoto)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setActiveModalPhoto(featuredHeroPhoto);
+              }
+            }}
+            aria-label={`Featured Photograph: ${featuredHeroPhoto.title} by ${featuredHeroPhoto.author}`}
+            title="Click to view full photograph details"
+          >
+            <div className="hero-showcase-img-wrap">
+              <img src={featuredHeroPhoto.url} alt={featuredHeroPhoto.title} />
+              <div className="hero-showcase-badge">
+                <span>⭐ FEATURED PIECE</span>
+              </div>
+            </div>
+            <div className="hero-showcase-meta">
+              <div className="hero-showcase-top">
+                <span className="hero-showcase-cat">{featuredHeroPhoto.category}</span>
+                <span className="hero-showcase-hint">Click to inspect ↗</span>
+              </div>
+              <h3 className="hero-showcase-title">{featuredHeroPhoto.title}</h3>
+              <p className="hero-showcase-author">
+                <span>Photograph by <strong>{featuredHeroPhoto.author}</strong></span>
+                {featuredHeroPhoto.location && (
+                  <span className="hero-showcase-loc">📍 {featuredHeroPhoto.location.split(",")[0]}</span>
+                )}
+              </p>
+            </div>
+          </div>
+        )}
       </section>
 
+      {/* Main Collection & Aesthetic Search Hub */}
       <section className="collection-section" id="collection">
         <div className="collection-heading">
           <div>
-            <p className="eyebrow">The portfolio</p>
+            <p className="eyebrow"><span className="eyebrow-mark" /> The Exhibition Portfolio</p>
             <h2>Recent <em>photographs</em></h2>
           </div>
-          <p className="collection-count"><strong>{photos.length.toString().padStart(2, "0")}</strong> photographs<br />from <strong>{contributorCount.toString().padStart(2, "0")}</strong> contributors</p>
+          <p className="collection-count">
+            <strong>{photos.length.toString().padStart(2, "0")}</strong> photographs<br />
+            from <strong>{contributorCount.toString().padStart(2, "0")}</strong> contributors
+          </p>
         </div>
 
-        <div className="gallery-toolbar">
-          <label className="gallery-search">
-            <span aria-hidden="true">⌕</span>
+        {/* Aesthetic Search Hub */}
+        <div className="aesthetic-search-container">
+          <div className={`aesthetic-search-capsule${isSearchFocused ? " is-focused" : ""}`}>
+            <div className="search-icon-wrap" aria-hidden="true">
+              <span className="search-icon">⌕</span>
+            </div>
+
             <input
-              type="search"
-              placeholder="Find a photograph"
-              aria-label="Search photographs by title, creator, or category"
+              ref={searchInputRef}
+              id="gallery-search-input"
+              type="text"
+              className="aesthetic-search-input"
+              placeholder="Search by title, location, creator, camera, tags (e.g. Alpine, Tokyo, Sony, Rain)..."
+              aria-label="Search photographs"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
             />
-          </label>
-          <div className="gallery-toolbar-actions">
-            {user && <span className="contribution-note">Your photographs: {myContributionCount}</span>}
-            {user && <button className="text-action" onClick={() => navigate("/submit")}>Submit a photograph <span aria-hidden="true">↗</span></button>}
-            <button className={`favorite-filter${onlyFavorites ? " is-active" : ""}`} onClick={() => setOnlyFavorites(!onlyFavorites)} aria-pressed={onlyFavorites}>
-              <span aria-hidden="true">{onlyFavorites ? "♥" : "♡"}</span> Favorites
+
+            {searchTerm && (
+              <button
+                type="button"
+                className="search-clear-btn"
+                onClick={() => {
+                  setSearchTerm("");
+                  searchInputRef.current?.focus();
+                }}
+                aria-label="Clear search query"
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
+
+            <div className="search-meta-badge">
+              <kbd className="search-shortcut" title="Press / anywhere to search">/</kbd>
+            </div>
+          </div>
+
+          {/* Quick Trending Searches */}
+          <div className="trending-tags-row">
+            <span className="trending-label">Quick Filters:</span>
+            <div className="trending-tags-list">
+              {TRENDING_TAGS.map((item) => {
+                const isActive = searchTerm.toLowerCase() === item.query.toLowerCase();
+                return (
+                  <button
+                    key={item.query}
+                    type="button"
+                    className={`trending-tag-chip${isActive ? " is-active" : ""}`}
+                    onClick={() => setSearchTerm(isActive ? "" : item.query)}
+                  >
+                    <span>{item.label}</span>
+                    {isActive && <span className="chip-remove">✕</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Enhanced Gallery Toolbar with Category Tabs & Actions */}
+        <div className="gallery-toolbar-enhanced">
+          <div className="category-pills" role="tablist" aria-label="Filter photographs by category">
+            {categories.map((category) => (
+              <button
+                key={category}
+                role="tab"
+                className={`category-pill${selectedCategory === category ? " is-active" : ""}`}
+                onClick={() => setSelectedCategory(category)}
+                aria-selected={selectedCategory === category}
+              >
+                <span>{category}</span>
+                <span className="category-count-badge">
+                  {categoryCounts[category] || 0}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="toolbar-actions-group">
+            {user && (
+              <span className="contribution-pill">
+                <span>Your Photos:</span> <strong>{myContributionCount}</strong>
+              </span>
+            )}
+            {user && (
+              <button
+                type="button"
+                className="action-submit-btn"
+                onClick={() => navigate("/submit")}
+              >
+                <span>Submit Photo</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+            )}
+            <button
+              type="button"
+              className={`favorite-filter-btn${onlyFavorites ? " is-active" : ""}`}
+              onClick={() => setOnlyFavorites(!onlyFavorites)}
+              aria-pressed={onlyFavorites}
+            >
+              <span className="fav-heart">{onlyFavorites ? "♥" : "♡"}</span>
+              <span>Favorites</span>
+              <span className="fav-count">
+                {photos.filter((p) => p.isFavorite).length}
+              </span>
             </button>
           </div>
         </div>
 
-        <div className="category-list" aria-label="Filter by category">
-          {categories.map((category) => (
+        {/* Live Search Status Bar */}
+        {isFiltered && (
+          <div className="search-status-bar">
+            <span>
+              Showing <strong>{filteredPhotos.length}</strong> of <strong>{photos.length}</strong> photographs
+              {searchTerm && <span> matching &ldquo;<strong>{searchTerm}</strong>&rdquo;</span>}
+              {onlyFavorites && <span> in <strong>Favorites</strong></span>}
+              {selectedCategory !== "All" && <span> in <strong>{selectedCategory}</strong></span>}
+            </span>
             <button
-              key={category}
-              className={`category-filter${selectedCategory === category ? " is-active" : ""}`}
-              onClick={() => setSelectedCategory(category)}
-              aria-pressed={selectedCategory === category}
+              type="button"
+              className="reset-filters-btn"
+              onClick={handleResetFilters}
             >
-              {category}
+              Reset all filters ↺
             </button>
-          ))}
+          </div>
+        )}
+
+        {/* Controls Bar: Layout View Switcher & Sorting */}
+        <div className="gallery-controls-bar">
+          <div className="controls-left">
+            <div className="view-mode-toggle-group" role="group" aria-label="Gallery layout view mode">
+              <button
+                type="button"
+                className={`view-mode-btn${viewMode === "grid" ? " is-active" : ""}`}
+                onClick={() => setViewMode("grid")}
+                title="Uniform 3-Column Grid"
+              >
+                <span>☷</span>
+                <span>Grid</span>
+              </button>
+              <button
+                type="button"
+                className={`view-mode-btn${viewMode === "masonry" ? " is-active" : ""}`}
+                onClick={() => setViewMode("masonry")}
+                title="Editorial Masonry Flow"
+              >
+                <span>☶</span>
+                <span>Masonry</span>
+              </button>
+              <button
+                type="button"
+                className={`view-mode-btn${viewMode === "cinematic" ? " is-active" : ""}`}
+                onClick={() => setViewMode("cinematic")}
+                title="Cinematic Widescreen Frames"
+              >
+                <span>▤</span>
+                <span>Cinematic</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="controls-right">
+            <div className="sort-select-wrap">
+              <span>Sort:</span>
+              <select
+                className="sort-select"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                aria-label="Sort collection"
+              >
+                <option value="curated">Curated Collection</option>
+                <option value="popular">Most Appreciated</option>
+                <option value="latest">Recently Added</option>
+              </select>
+            </div>
+          </div>
         </div>
 
-        <div className="photo-grid">
-          {filteredPhotos.length > 0 ? filteredPhotos.map((photo) => (
-            <PhotoCard
-              key={photo.id}
-              photo={photo}
-              onToggleFavorite={handleToggleFavorite}
-              onDelete={() => onDeletePhoto(photo)}
-              isAdmin={user?.role === "admin"}
-              onOpenModal={setActiveModalPhoto}
-            />
-          )) : (
-            <p className="gallery-empty">No photographs match those filters.</p>
+        {/* Photo Grid */}
+        <div className={`photo-grid is-view-${viewMode}`}>
+          {filteredPhotos.length > 0 ? (
+            filteredPhotos.map((photo) => (
+              <PhotoCard
+                key={photo.id}
+                photo={photo}
+                onToggleFavorite={handleToggleFavorite}
+                onDelete={() => onDeletePhoto(photo)}
+                isAdmin={user?.role === "admin"}
+                onOpenModal={setActiveModalPhoto}
+              />
+            ))
+          ) : (
+            <div className="gallery-empty-state">
+              <span className="empty-state-icon">🔍</span>
+              <h3>No photographs found</h3>
+              <p>
+                No photographs matched your current search query or category filters.
+              </p>
+              <button
+                type="button"
+                className="empty-reset-btn"
+                onClick={handleResetFilters}
+              >
+                View all {photos.length} photographs
+              </button>
+            </div>
           )}
         </div>
       </section>
 
+      {/* Detail Lightbox Modal */}
       {activeModalPhoto && (
-        <div className="photo-modal" onClick={() => setActiveModalPhoto(null)}>
-          <div className="photo-modal-content" role="dialog" aria-modal="true" aria-label={activeModalPhoto.title} onClick={(event) => event.stopPropagation()}>
-            <img src={activeModalPhoto.url} alt={activeModalPhoto.title} />
-            <div className="photo-modal-meta">
-              <div><h3>{activeModalPhoto.title}</h3><p>Photograph by {activeModalPhoto.author || "Creator"}</p></div>
-              <span>{activeModalPhoto.category}</span>
-            </div>
-            {relatedPhotos.length > 0 && (
-              <section className="related-photos" aria-label={`More ${activeModalPhoto.category} photographs`}>
-                <h4>More from {activeModalPhoto.category}</h4>
-                <div className="related-photo-list">
-                  {relatedPhotos.map((photo) => (
-                    <button key={photo.id} className="related-photo" onClick={() => setActiveModalPhoto(photo)} aria-label={`View ${photo.title}`}>
-                      <img src={photo.url} alt="" loading="lazy" />
-                      <span>{photo.title}</span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-            )}
-            <button className="photo-modal-close" onClick={() => setActiveModalPhoto(null)} aria-label="Close photograph">×</button>
-          </div>
-        </div>
+        <PhotoDetailModal
+          photo={activeModalPhoto}
+          photos={filteredPhotos.length > 0 ? filteredPhotos : photos}
+          onClose={() => setActiveModalPhoto(null)}
+          onSelectPhoto={setActiveModalPhoto}
+          onToggleFavorite={handleToggleFavorite}
+        />
       )}
     </main>
   );

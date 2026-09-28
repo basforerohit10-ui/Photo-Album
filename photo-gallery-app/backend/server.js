@@ -37,6 +37,12 @@ const photoSchema = new mongoose.Schema(
     category: { type: String, required: true, trim: true },
     author: { type: String, required: true, trim: true },
     submittedBy: { type: String, required: true, trim: true },
+    description: { type: String, default: "", trim: true },
+    location: { type: String, default: "", trim: true },
+    camera: { type: String, default: "", trim: true },
+    lens: { type: String, default: "", trim: true },
+    settings: { type: String, default: "", trim: true },
+    tags: { type: [String], default: [] },
     status: { type: String, enum: ["pending", "approved"], default: "pending" },
     isFavorite: { type: Boolean, default: false },
   },
@@ -80,8 +86,15 @@ const serializePhoto = (photo) => ({
   category: photo.category,
   author: photo.author,
   submittedBy: photo.submittedBy,
+  description: photo.description || "",
+  location: photo.location || "",
+  camera: photo.camera || "",
+  lens: photo.lens || "",
+  settings: photo.settings || "",
+  tags: photo.tags || [],
   status: photo.status,
   isFavorite: photo.isFavorite,
+  createdAt: photo.createdAt,
 });
 
 const createToken = (user) => jwt.sign(
@@ -210,7 +223,7 @@ app.get("/api/photos/mine", requireAuth, async (req, res) => {
 
 app.post("/api/photos", requireAuth, async (req, res) => {
   try {
-    const { title, url, category } = req.body || {};
+    const { title, url, category, description, location, camera, lens, settings, tags } = req.body || {};
     if (!title?.trim() || !url?.trim() || !category?.trim()) {
       return res.status(400).json({ message: "Title, category, and image URL/data are required." });
     }
@@ -229,6 +242,12 @@ app.post("/api/photos", requireAuth, async (req, res) => {
       category: category.trim(),
       author,
       submittedBy,
+      description: description ? description.trim() : "",
+      location: location ? location.trim() : "",
+      camera: camera ? camera.trim() : "",
+      lens: lens ? lens.trim() : "",
+      settings: settings ? settings.trim() : "",
+      tags: Array.isArray(tags) ? tags : [],
       status,
     });
     res.status(201).json(serializePhoto(photo));

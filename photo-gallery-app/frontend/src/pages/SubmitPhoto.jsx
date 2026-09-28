@@ -12,6 +12,10 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
     title: "",
     category: "Nature",
     url: "",
+    description: "",
+    location: "",
+    camera: "",
+    tags: "",
   });
   const [imagePreview, setImagePreview] = useState("");
   const [message, setMessage] = useState("");
@@ -83,6 +87,10 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
       url: form.url.trim(),
       author: user.fullName || user.username || "Photographer",
       submittedBy: user.username,
+      description: form.description?.trim() || "",
+      location: form.location?.trim() || "",
+      camera: form.camera?.trim() || "",
+      tags: form.tags ? form.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
     };
 
     setLoading(true);
@@ -95,7 +103,7 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
           ? "✓ Photo published directly to the live gallery!"
           : "✓ Photo submitted successfully! It is now in the review queue for admin approval."
       );
-      setForm({ title: "", category: "Nature", url: "" });
+      setForm({ title: "", category: "Nature", url: "", description: "", location: "", camera: "", tags: "" });
       setImagePreview("");
       if (fileInputRef.current) fileInputRef.current.value = "";
 
@@ -163,6 +171,58 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
                 <option value="Wildlife">Wildlife</option>
                 <option value="Portrait">Portrait</option>
               </select>
+            </div>
+
+            {/* Photo Details / Story */}
+            <div style={styles.field}>
+              <label style={styles.label}>Photo Story &amp; Details (Kya chiz ka photo hai?)</label>
+              <textarea
+                name="description"
+                placeholder="Photo ke baare mein bataiye: scene kaisa tha, kya chiz photo mein capture hui hai, lighting kaisi thi..."
+                value={form.description}
+                onChange={handleChange}
+                rows={3}
+                style={{ ...styles.input, height: "auto", resize: "vertical", padding: "0.75rem 1rem" }}
+              />
+            </div>
+
+            {/* Location & Camera Device */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
+              <div style={styles.field}>
+                <label style={styles.label}>Location (Kahan liya gaya?)</label>
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="e.g. Manali, Himachal or Tokyo, Japan"
+                  value={form.location}
+                  onChange={handleChange}
+                  style={styles.input}
+                />
+              </div>
+
+              <div style={styles.field}>
+                <label style={styles.label}>Camera / Phone</label>
+                <input
+                  type="text"
+                  name="camera"
+                  placeholder="e.g. Sony A7IV or iPhone 15 Pro"
+                  value={form.camera}
+                  onChange={handleChange}
+                  style={styles.input}
+                />
+              </div>
+            </div>
+
+            <div style={styles.field}>
+              <label style={styles.label}>Tags (Separate with commas)</label>
+              <input
+                type="text"
+                name="tags"
+                placeholder="e.g. Mountains, Sunset, Golden Hour"
+                value={form.tags}
+                onChange={handleChange}
+                style={styles.input}
+              />
             </div>
 
             {/* Upload Method Switcher */}
