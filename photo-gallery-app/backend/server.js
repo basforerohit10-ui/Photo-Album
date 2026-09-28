@@ -8,11 +8,11 @@ import jwt from "jsonwebtoken";
 const app = express();
 const port = Number(process.env.PORT || 5000);
 const mongoUri = process.env.MONGODB_URI;
-const jwtSecret = process.env.JWT_SECRET || "local-development-secret-change-me";
-const adminSecurityKey = "2005";
+const jwtSecret = process.env.JWT_SECRET;
+const adminSecurityKey = process.env.ADMIN_SECRET_KEY;
 
-if (!mongoUri) {
-  console.error("MONGODB_URI is missing. Add it to .env before starting the API.");
+if (!mongoUri || !jwtSecret || !adminSecurityKey || !process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+  console.error("MONGODB_URI, JWT_SECRET, ADMIN_SECRET_KEY, ADMIN_USERNAME, and ADMIN_PASSWORD must be set in .env.");
   process.exit(1);
 }
 
@@ -51,7 +51,6 @@ const initialPhotos = [
   ["Minimal Concrete", "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80", "Architecture", "Klaus Meier"],
   ["Neon Streets", "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80", "Urban", "Kenji Sato"],
   ["Misty Pine Forest", "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80", "Nature", "Lukas Budimaier"],
-  ["Geometric Spiral", "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80", "Architecture", "Sarah Dorweiler"],
   ["Desert Solitude", "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80", "Minimal", "Jeremy Bishop"],
   ["Coastal Drift", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", "Nature", "Mila Anders"],
   ["City in Motion", "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=800&q=80", "Urban", "Noah Grant"],
@@ -59,6 +58,19 @@ const initialPhotos = [
   ["Forest Lines", "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=800&q=80", "Nature", "Iris Holt"],
   ["Glass Tower", "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80", "Architecture", "Peter Lane"],
   ["Golden Shore", "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=800&q=80", "Nature", "Leah Brooks"],
+  ["First Light", "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80", "Nature", "Unsplash"],
+  ["Mountain Weather", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80", "Nature", "Unsplash"],
+  ["Blue Hour Lake", "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80", "Nature", "Unsplash"],
+  ["Ocean Air", "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80", "Nature", "Unsplash"],
+  ["Wildflower Season", "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80", "Nature", "Unsplash"],
+  ["Alpine Meadow", "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80", "Nature", "Unsplash"],
+  ["Quiet Geometry", "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80", "Architecture", "Unsplash"],
+  ["White Concrete", "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=800&q=80", "Architecture", "Unsplash"],
+  ["Built in Lines", "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80", "Architecture", "Unsplash"],
+  ["City in Rain", "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=800&q=80", "Urban", "Unsplash"],
+  ["Night Shift", "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=800&q=80", "Urban", "Unsplash"],
+  ["Room for Thought", "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80", "Minimal", "Unsplash"],
+  ["A Study in Stillness", "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=800&q=80", "Minimal", "Unsplash"],
 ];
 
 const serializePhoto = (photo) => ({
@@ -99,6 +111,11 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
+// Root route
+app.get("/", (_req, res) => {
+  res.json({ message: "Photo Gallery API is running successfully!" });
+});
+
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
 app.post("/api/auth/register", async (req, res) => {
@@ -106,7 +123,33 @@ app.post("/api/auth/register", async (req, res) => {
     const fullName = req.body.fullName?.trim();
     const username = req.body.username?.trim().toLowerCase();
     const password = req.body.password;
-    const requestedRole = req.body.role === "admin" ? "admin" : "user";
+    if (!fullName || !username || !password) {
+      return res.status(400).json({ message: "Please fill in all fields." });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters." });
+    }
+    if (await User.exists({ username })) {
+      return res.status(409).json({ message: "This username is already taken." });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    await User.create({ fullName, username, passwordHash, role: "user" });
+    res.status(201).json({
+      message: "Registration successful. Please log in.",
+      role: "user",
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({ message: error.message || "Unable to register right now." });
+  }
+});
+
+app.post("/api/admin/users", requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const fullName = req.body.fullName?.trim();
+    const username = req.body.username?.trim().toLowerCase();
+    const password = req.body.password;
 
     if (!fullName || !username || !password) {
       return res.status(400).json({ message: "Please fill in all fields." });
@@ -118,18 +161,12 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(409).json({ message: "This username is already taken." });
     }
 
-    let role = "user";
-    if (requestedRole === "admin") role = "admin";
-
     const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ fullName, username, passwordHash, role });
-    res.status(201).json({
-      message: role === "admin" ? "Admin registration successful! You can now log in." : "Registration successful. Please log in.",
-      role,
-    });
+    await User.create({ fullName, username, passwordHash, role: "admin" });
+    res.status(201).json({ message: "Admin account created successfully.", role: "admin" });
   } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: error.message || "Unable to register right now." });
+    console.error("Admin registration error:", error);
+    res.status(500).json({ message: error.message || "Unable to create admin account." });
   }
 });
 
@@ -223,8 +260,8 @@ app.delete("/api/admin/photos/:id", requireAuth, requireAdmin, async (req, res) 
 });
 
 const seedDatabase = async () => {
-  const adminUsername = (process.env.ADMIN_USERNAME || "admin").toLowerCase();
-  const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+  const adminUsername = process.env.ADMIN_USERNAME.toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD;
   const adminExists = await User.exists({ username: adminUsername });
 
   if (!adminExists) {
@@ -237,11 +274,37 @@ const seedDatabase = async () => {
     console.log(`Seeded admin account: ${adminUsername}`);
   }
 
-  if ((await Photo.countDocuments()) === 0) {
-    await Photo.insertMany(initialPhotos.map(([title, url, category, author]) => ({
-      title, url, category, author, submittedBy: adminUsername, status: "approved",
-    })));
-    console.log("Seeded initial gallery photos.");
+  const seedResult = await Photo.bulkWrite(initialPhotos.map(([title, url, category, author]) => ({
+    updateOne: {
+      filter: { title },
+      update: { $setOnInsert: { title, url, category, author, submittedBy: adminUsername, status: "approved" } },
+      upsert: true,
+    },
+  })));
+  if (seedResult.upsertedCount) console.log(`Added ${seedResult.upsertedCount} sample gallery photos.`);
+
+  const approvedPhotos = await Photo.find({ status: "approved" })
+    .sort({ createdAt: 1, _id: 1 })
+    .select("_id url")
+    .lean();
+  const seenImageUrls = new Set();
+  const duplicatePhotoIds = [];
+
+  for (const photo of approvedPhotos) {
+    let imageUrl = photo.url.trim();
+    try {
+      const parsedUrl = new URL(imageUrl);
+      imageUrl = `${parsedUrl.origin}${parsedUrl.pathname}`;
+    } catch {
+      // Keep non-URL image values distinct by their exact string.
+    }
+    if (seenImageUrls.has(imageUrl)) duplicatePhotoIds.push(photo._id);
+    else seenImageUrls.add(imageUrl);
+  }
+
+  if (duplicatePhotoIds.length) {
+    const result = await Photo.deleteMany({ _id: { $in: duplicatePhotoIds } });
+    console.log(`Removed ${result.deletedCount} duplicate approved gallery photos.`);
   }
 };
 

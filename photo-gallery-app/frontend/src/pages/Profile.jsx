@@ -31,11 +31,11 @@ const Profile = () => {
   };
 
   return (
-    <main style={styles.page}>
-      <section style={styles.card} className="glass-panel">
+    <main style={styles.page} className="studio-profile-page">
+      <section style={styles.card} className="studio-profile-card">
         <button type="button" onClick={handleBack} style={styles.backButton}>← Back</button>
-        <div style={styles.avatar}>{(user.fullName || user.username).charAt(0).toUpperCase()}</div>
-        <span style={styles.eyebrow}>MY PROFILE</span>
+        <div style={styles.avatar} className="profile-avatar">{(user.fullName || user.username).charAt(0).toUpperCase()}</div>
+        <span style={styles.eyebrow} className="profile-eyebrow">MY PROFILE</span>
         <h1 style={styles.title}>{user.fullName || user.username}</h1>
         <p style={styles.username}>@{user.username}</p>
 
@@ -58,7 +58,7 @@ const Profile = () => {
         <div style={styles.uploadsSection}>
           <div style={styles.uploadsHeader}>
             <div>
-              <span style={styles.eyebrow}>MY UPLOADS</span>
+              <span style={styles.eyebrow} className="profile-eyebrow">MY UPLOADS</span>
               <h2 style={styles.uploadsTitle}>Photos you submitted</h2>
             </div>
             <strong style={styles.count}>{photos.length}</strong>

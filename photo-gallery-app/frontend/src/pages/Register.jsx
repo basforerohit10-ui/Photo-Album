@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const Register = () => {
-  const [searchParams] = useSearchParams();
-  const isAdminParam = searchParams.get("role") === "admin";
-
-  const [modeOverride, setModeOverride] = useState(null);
-  const isAdminMode = modeOverride !== null ? modeOverride : isAdminParam;
-
+const Register = ({ adminMode = false }) => {
   const [form, setForm] = useState({
     fullName: "",
     username: "",
@@ -18,7 +12,7 @@ const Register = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { register } = useAuth();
+  const { user, register, registerAdmin } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -34,70 +28,46 @@ const Register = () => {
       fullName: form.fullName,
       username: form.username,
       password: form.password,
-      role: isAdminMode ? "admin" : "user",
     };
 
-    const result = await register(payload);
+    const result = adminMode
+      ? await registerAdmin(user.token, payload)
+      : await register(payload);
     setLoading(false);
     setMessage(result.message);
     setIsSuccess(result.ok);
 
     if (result.ok) {
       setTimeout(() => {
-        navigate(isAdminMode ? "/login?role=admin" : "/login");
+        navigate(adminMode ? "/admin" : "/login");
       }, 1200);
     }
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <div style={styles.box} className="glass-panel">
-          {/* Mode Tabs */}
+    <div style={styles.page} className="studio-auth-page">
+      <div style={styles.container} className="studio-auth-layout">
+        <aside className="studio-auth-aside">
+          <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
+          <div>
+            <h1>Make room<br />for your vision.</h1>
+            <p>{adminMode ? "Create a trusted studio administrator account." : "Join the collection and share photographs that see the world your way."}</p>
+          </div>
+          <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
+        </aside>
+        <div style={styles.box} className="studio-auth-card">
           <div style={styles.tabBar}>
-            <Link to="/register" style={{ ...styles.tabBtn, ...(!isAdminMode ? styles.tabBtnActive : {}) }}>
-              Register
+            <Link to={adminMode ? "/admin" : "/register"} style={{ ...styles.tabBtn, ...styles.tabBtnActive }}>
+              {adminMode ? "Admin dashboard" : "Register"}
             </Link>
             <Link to="/login" style={styles.tabBtn}>
               Login
             </Link>
           </div>
 
-          <div style={styles.tabBar}>
-            <button
-              type="button"
-              onClick={() => { setModeOverride(false); setMessage(""); }}
-              style={{
-                ...styles.tabBtn,
-                ...(isAdminMode ? {} : styles.tabBtnActive),
-              }}
-            >
-              Contributor Account
-            </button>
-            <button
-              type="button"
-              onClick={() => { setModeOverride(true); setMessage(""); }}
-              style={{
-                ...styles.tabBtn,
-                ...(isAdminMode ? styles.adminTabBtnActive : {}),
-              }}
-            >
-              🛡️ Admin Account
-            </button>
-          </div>
-
           <div style={styles.headerBox}>
-            {isAdminMode && (
-              <span style={styles.adminBadge}>ADMINISTRATOR REGISTRATION</span>
-            )}
-            <h2 style={styles.title}>
-              {isAdminMode ? "Register Admin Account" : "Create Account"}
-            </h2>
-            <p style={styles.sub}>
-              {isAdminMode
-                ? "Create a new administrator account. The Admin Security Key is required when signing in."
-                : "Join the gallery community and submit your photography as a contributor."}
-            </p>
+            <h2 style={styles.title}>{adminMode ? "Register an administrator" : "Create account"}</h2>
+            <p style={styles.sub}>{adminMode ? "Set up the admin's name, username, and password. The separate passcode is entered at sign in." : "Join the gallery community and submit your photography as a contributor."}</p>
           </div>
 
           <form onSubmit={handleSubmit} style={styles.form}>
@@ -155,28 +125,14 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                ...styles.btn,
-                ...(isAdminMode ? styles.adminBtn : {}),
-                opacity: loading ? 0.7 : 1,
-              }}
+              style={{ ...styles.btn, opacity: loading ? 0.7 : 1 }}
             >
-              {loading
-                ? "Creating account..."
-                : isAdminMode
-                ? "⚡ Create Admin Account"
-                : "Register Account"}
+              {loading ? "Creating account..." : adminMode ? "Create admin account" : "Create account"}
             </button>
           </form>
 
           <p style={styles.helper}>
-            Already have an account?{" "}
-            <Link
-              to={isAdminMode ? "/login?role=admin" : "/login"}
-              style={isAdminMode ? styles.adminLoginLink : styles.link}
-            >
-              {isAdminMode ? "Sign in to Admin Portal" : "Login here"}
-            </Link>
+            {adminMode ? "Admin accounts use the separate admin sign-in passcode." : <>Already have an account?{" "}<Link to="/login" style={styles.link}>Login here</Link></>}
           </p>
         </div>
       </div>

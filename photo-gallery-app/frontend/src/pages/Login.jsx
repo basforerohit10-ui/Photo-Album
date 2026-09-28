@@ -45,9 +45,17 @@ const Login = ({ initialMode }) => {
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <div style={styles.box} className="glass-panel">
+    <div style={styles.page} className="studio-auth-page">
+      <div style={styles.container} className="studio-auth-layout">
+        <aside className="studio-auth-aside">
+          <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
+          <div>
+            <h1>Good photographs<br />stay with you.</h1>
+            <p>Sign in to explore the collection and share your own point of view.</p>
+          </div>
+          <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
+        </aside>
+        <div style={styles.box} className="studio-auth-card">
           {/* Mode Tabs */}
           <div style={styles.tabBar}>
             <button
@@ -158,9 +166,7 @@ const Login = ({ initialMode }) => {
             <p style={styles.helper}>
               Don&apos;t have an account?{" "}
               {isAdminMode ? (
-                <Link to="/register?role=admin" style={styles.adminRegisterLink}>
-                  Register as Admin
-                </Link>
+                <span style={styles.adminRegisterLink}>Administrator accounts are provisioned by the site owner.</span>
               ) : (
                 <Link to="/register" style={styles.link}>
                   Register as Contributor

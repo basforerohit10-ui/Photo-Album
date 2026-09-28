@@ -19,6 +19,11 @@ const authHeaders = (token) => ({ Authorization: `Bearer ${token}` });
 
 export const api = {
   register: (payload) => request("/auth/register", { method: "POST", body: JSON.stringify(payload) }),
+  registerAdmin: (token, payload) => request("/admin/users", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(payload),
+  }),
   login: (payload) => request("/auth/login", { method: "POST", body: JSON.stringify(payload) }),
   getPhotos: () => request("/photos"),
   getMyPhotos: (token) => request("/photos/mine", { headers: authHeaders(token) }),

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) => {
   const approvedPhotos = photos;
@@ -7,31 +8,32 @@ const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) =>
   ).size;
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <div style={styles.header}>
-          <h2 style={styles.title}>Rohit Photography — Admin Dashboard</h2>
+    <main style={styles.page} className="studio-admin-page">
+      <div style={styles.container} className="studio-admin-container">
+        <div style={styles.header} className="studio-admin-header">
+          <h2 style={styles.title}>Rohit Photostudio — Admin Dashboard</h2>
           <p style={styles.subtitle}>Review submitted photos, approve them, and manage gallery content.</p>
           <p style={styles.guide}>Pending photo ko gallery mein dikhane ke liye <strong>Approve &amp; Publish</strong> choose karein. Galat photo ke liye <strong>Reject</strong> use karein.</p>
+          <Link to="/admin/register" style={styles.createAdminLink}>Register another admin</Link>
         </div>
 
-        <div style={styles.statsRow}>
-          <div style={styles.statCard} className="glass-panel">
+        <div style={styles.statsRow} className="studio-admin-stats">
+          <div style={styles.statCard} className="studio-admin-stat">
             <span style={styles.label}>Pending</span>
             <strong style={styles.value}>{pendingPhotos.length}</strong>
           </div>
-          <div style={styles.statCard} className="glass-panel">
+          <div style={styles.statCard} className="studio-admin-stat">
             <span style={styles.label}>Approved</span>
             <strong style={styles.value}>{approvedPhotos.length}</strong>
           </div>
-          <div style={styles.statCard} className="glass-panel">
+          <div style={styles.statCard} className="studio-admin-stat">
             <span style={styles.label}>Contributors</span>
             <strong style={styles.value}>{contributorCount}</strong>
           </div>
         </div>
 
-        <div style={styles.sectionGrid}>
-          <div style={styles.panel} className="glass-panel">
+        <div style={styles.sectionGrid} className="studio-admin-panels">
+          <section style={styles.panel} className="studio-admin-panel">
             <h3 style={styles.sectionTitle}>Pending Photos <span style={styles.sectionHint}>Needs review</span></h3>
 
             {pendingPhotos.length === 0 ? (
@@ -52,9 +54,9 @@ const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) =>
                 </div>
               ))
             )}
-          </div>
+          </section>
 
-          <div style={styles.panel} className="glass-panel">
+          <section style={styles.panel} className="studio-admin-panel">
             <h3 style={styles.sectionTitle}>Approved Gallery <span style={styles.sectionHint}>Live photos</span></h3>
 
             {approvedPhotos.map((photo) => (
@@ -68,10 +70,10 @@ const AdminPanel = ({ photos, pendingPhotos, onApprovePhoto, onDeletePhoto }) =>
                 <button onClick={() => onDeletePhoto(photo)} style={styles.rejectBtn}>Delete</button>
               </div>
             ))}
-          </div>
+          </section>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
@@ -85,6 +87,7 @@ const styles = {
   title: { fontSize: "2rem", color: "#fff", marginBottom: "0.3rem", textShadow: "0 4px 20px rgba(15,23,42,0.7)" },
   subtitle: { color: "#e2e8f0", textShadow: "0 4px 20px rgba(15,23,42,0.7)" },
   guide: { display: "inline-block", marginTop: "0.8rem", padding: "0.65rem 0.85rem", borderRadius: "10px", color: "#fef3c7", background: "rgba(120, 53, 15, 0.35)", border: "1px solid rgba(251, 191, 36, 0.25)", fontSize: "0.82rem" },
+  createAdminLink: { display: "inline-block", margin: "0.8rem 0 0 0.65rem", padding: "0.65rem 0.85rem", borderRadius: "8px", color: "#111310", background: "#c77a62", textDecoration: "none", fontSize: "0.82rem", fontWeight: "700" },
   statsRow: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginBottom: "2rem" },
   statCard: { borderRadius: "16px", padding: "1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.3rem", background: "rgba(15, 23, 42, 0.55)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", boxShadow: "0 10px 25px rgba(15, 23, 42, 0.18)" },
   label: { color: "#94a3b8", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em" },

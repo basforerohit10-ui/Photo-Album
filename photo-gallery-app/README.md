@@ -1,4 +1,4 @@
-# Lumen Photo Gallery
+# Rohit Photostudio
 
 The repository is organized into a `frontend/` Vite app and a `backend/` Express API.
 
@@ -6,7 +6,7 @@ The repository is organized into a `frontend/` Vite app and a `backend/` Express
 
 1. Create a MongoDB Atlas cluster and copy its connection string.
 2. Copy `.env.example` to `.env` and replace `MONGODB_URI` with your connection string.
-3. Change `JWT_SECRET` and, if needed, the seeded admin credentials.
+3. Set unique, strong values for `JWT_SECRET`, `ADMIN_SECRET_KEY`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD`. Never use development credentials in production.
 4. Start the frontend and API together:
 
 ```bash
@@ -15,9 +15,9 @@ npm run dev:full
 
 The frontend runs at `http://localhost:5173` and the API runs at `http://localhost:5000`.
 
-Default seeded admin credentials are `admin` / `admin123` unless changed in `.env`.
+The API creates the administrator specified in `.env` when the database is empty. Public registration only creates contributor accounts; additional administrators must be provisioned by the site owner.
 
-New users are always registered as contributors. Only the seeded admin account can approve or delete photos.
+The gallery stores image URLs and metadata in MongoDB; image files are not uploaded to this app. It currently has no checkout, payments, or photo-license purchase flow.
 
 ## Available scripts
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
-import AnimatedBackground from "./components/AnimatedBackground";
+import SiteFooter from "./components/SiteFooter";
 import Gallery from "./pages/Gallery";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
@@ -47,15 +47,6 @@ const INITIAL_PHOTOS = [
     url: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80",
     category: "Nature",
     author: "Lukas Budimaier",
-    submittedBy: "admin",
-    isFavorite: false,
-  },
-  {
-    id: 5,
-    title: "Geometric Spiral",
-    url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
-    category: "Architecture",
-    author: "Sarah Dorweiler",
     submittedBy: "admin",
     isFavorite: false,
   },
@@ -122,6 +113,19 @@ const INITIAL_PHOTOS = [
     submittedBy: "admin",
     isFavorite: false,
   },
+  { id: 13, title: "First Light", url: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=80", category: "Nature", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 14, title: "Mountain Weather", url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80", category: "Nature", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 15, title: "Blue Hour Lake", url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80", category: "Nature", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 16, title: "Ocean Air", url: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80", category: "Nature", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 17, title: "Wildflower Season", url: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80", category: "Nature", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 18, title: "Alpine Meadow", url: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80", category: "Nature", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 19, title: "Quiet Geometry", url: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=800&q=80", category: "Architecture", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 20, title: "White Concrete", url: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=800&q=80", category: "Architecture", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 21, title: "Built in Lines", url: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=80", category: "Architecture", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 22, title: "City in Rain", url: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=800&q=80", category: "Urban", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 23, title: "Night Shift", url: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=800&q=80", category: "Urban", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 24, title: "Room for Thought", url: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80", category: "Minimal", author: "Unsplash", submittedBy: "admin", isFavorite: false },
+  { id: 25, title: "A Study in Stillness", url: "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=800&q=80", category: "Minimal", author: "Unsplash", submittedBy: "admin", isFavorite: false },
 ];
 
 function AppContent() {
@@ -168,21 +172,21 @@ function AppContent() {
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
-      <AnimatedBackground />
       <div style={{ position: "relative", zIndex: 1 }}>
         <Navbar />
         <Routes>
           <Route
             path="/"
-            element={<Register />}
+            element={<Gallery photos={photos} setPhotos={setPhotos} onDeletePhoto={handleDeletePhoto} />}
           />
           <Route
             path="/gallery"
-            element={<Gallery photos={photos} setPhotos={setPhotos} />}
+            element={<Gallery photos={photos} setPhotos={setPhotos} onDeletePhoto={handleDeletePhoto} />}
           />
           <Route path="/login" element={<Login />} />
           <Route path="/admin/login" element={<Login initialMode="admin" />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/admin/register" element={<ProtectedRoute requiredRole="admin"><Register adminMode /></ProtectedRoute>} />
           <Route
             path="/profile"
             element={
@@ -213,6 +217,7 @@ function AppContent() {
             }
           />
         </Routes>
+        <SiteFooter />
       </div>
     </div>
   );

@@ -111,9 +111,17 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <div style={styles.card} className="glass-panel">
+    <div style={styles.page} className="studio-submit-page">
+      <div style={styles.container} className="studio-submit-layout">
+        <aside className="studio-submit-aside">
+          <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
+          <div>
+            <h1>Every frame<br />has a story.</h1>
+            <p>Choose a photograph that deserves a place in the collection.</p>
+          </div>
+          <span className="studio-aside-caption">SHARE YOUR PERSPECTIVE</span>
+        </aside>
+        <div style={styles.card} className="studio-submit-card">
           <div style={styles.header}>
             {user?.role === "admin" && (
               <span style={styles.adminBadge}>ADMIN DIRECT PUBLISH</span>
@@ -121,8 +129,8 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
             <h2 style={styles.title}>Submit Photography</h2>
             <p style={styles.sub}>
               {user?.role === "admin"
-                ? "Upload or link a photo. As an administrator, it will be published immediately to Rohit Photography."
-                : "Submit your work for Rohit Photography. The admin will review and publish it."}
+                ? "Upload or link a photo. As an administrator, it will be published immediately to Rohit Photostudio."
+                : "Submit your work for Rohit Photostudio. The admin will review and publish it."}
             </p>
           </div>
 

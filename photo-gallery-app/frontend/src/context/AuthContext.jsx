@@ -37,12 +37,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const registerAdmin = async (token, userData) => {
+    try {
+      const result = await api.registerAdmin(token, userData);
+      return { ok: true, message: result.message };
+    } catch (error) {
+      return { ok: false, message: error.message };
+    }
+  };
+
   const logout = () => {
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, registerAdmin, logout }}>
       {children}
     </AuthContext.Provider>
   );
