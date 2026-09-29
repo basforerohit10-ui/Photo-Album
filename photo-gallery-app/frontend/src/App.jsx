@@ -307,6 +307,82 @@ const INITIAL_PHOTOS = [
     submittedBy: "admin",
     isFavorite: false,
   },
+
+  // 🕉️ Sacred Deities & Gods
+  {
+    id: 32,
+    title: "Adiyogi Lord Shiva · Isha Sanctum",
+    url: "/images/india/adiyogi_shiva.jpg",
+    category: "Sacred Deities & Gods",
+    author: "Rohit Basfore",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
+  {
+    id: 33,
+    title: "Lord Ram Lalla & Ayodhya Sanctum",
+    url: "/images/india/ram_lalla.jpg",
+    category: "Sacred Deities & Gods",
+    author: "Aman Sharma",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
+  {
+    id: 34,
+    title: "Bhagwan Sri Krishna · Vrindavan Murti",
+    url: "/images/india/krishna_deity.jpg",
+    category: "Sacred Deities & Gods",
+    author: "Radhika Khandelwal",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
+  {
+    id: 35,
+    title: "Golden Murugan with Celestial Vel",
+    url: "/images/india/lord_murugan.jpg",
+    category: "Sacred Deities & Gods",
+    author: "Senthil Kumaran",
+    submittedBy: "admin",
+    isFavorite: false,
+  },
+
+  // 🪔 Festivals & Celebrations
+  {
+    id: 36,
+    title: "Diwali Deepotsav on Ayodhya Ghats",
+    url: "/images/india/diwali_festival.jpg",
+    category: "Festivals & Celebrations",
+    author: "Rohit Basfore",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
+  {
+    id: 37,
+    title: "Lalbaugcha Raja & Ganesh Chaturthi",
+    url: "/images/india/ganesh_chaturthi.jpg",
+    category: "Festivals & Celebrations",
+    author: "Aditya Patil",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
+  {
+    id: 38,
+    title: "Maa Durga Mahishasuramardini · Durga Puja",
+    url: "/images/india/durga_puja.jpg",
+    category: "Festivals & Celebrations",
+    author: "Anirban Bhattacharya",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
+  {
+    id: 39,
+    title: "Colors of Braj · Vrindavan Holi Celebration",
+    url: "/images/india/holi_festival.jpg",
+    category: "Festivals & Celebrations",
+    author: "Kavita Tiwari",
+    submittedBy: "admin",
+    isFavorite: true,
+  },
 ];
 
 function AppContent() {

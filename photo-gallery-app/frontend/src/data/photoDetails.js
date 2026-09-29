@@ -1,6 +1,8 @@
 // Curated metadata details for photo gallery items (Incredible India Fine-Art Collection)
 export const INDIAN_CATEGORIES = [
   "Temples & Spiritual",
+  "Sacred Deities & Gods",
+  "Festivals & Celebrations",
   "Famous Monuments",
   "Indian Nature",
   "Himalayas & Deserts",
@@ -11,6 +13,8 @@ export const INDIAN_CATEGORIES = [
 export const CATEGORY_ICONS = {
   All: "✨",
   "Temples & Spiritual": "🛕",
+  "Sacred Deities & Gods": "🕉️",
+  "Festivals & Celebrations": "🪔",
   "Famous Monuments": "🏰",
   "Indian Nature": "🌿",
   "Himalayas & Deserts": "🏔️",
@@ -340,6 +344,90 @@ export const PHOTO_METADATA_MAP = {
     date: "January 2026",
     tags: ["Kolkata", "HowrahBridge", "Bengal", "Culture", "HooghlyRiver", "Iconic"],
   },
+
+  // 🕉️ Sacred Deities & Gods
+  32: {
+    title: "Adiyogi Lord Shiva · Isha Sanctum",
+    description: "The colossal 112-foot steel bust of Adiyogi Lord Shiva rising gracefully against the mist-crowned Velliangiri hills at blue hour twilight, embodying the first yogi and eternal stillness.",
+    location: "Isha Yoga Center, Coimbatore, Tamil Nadu, India",
+    camera: "Hasselblad H6D-100c",
+    lens: "Hasselblad HC 35-90mm f/4-5.6",
+    settings: "1/80s • f/5.6 • ISO 200 • 45mm",
+    date: "January 2026",
+    tags: ["Adiyogi", "Shiva", "Mahadev", "Coimbatore", "Deity", "Spiritual", "Sacred"],
+  },
+  33: {
+    title: "Lord Ram Lalla & Ayodhya Sanctum",
+    description: "The divine 51-inch black stone idol of Bhagwan Sri Ram Lalla adorned in royal golden mukut, pearl necklaces, and pitambar robes inside the glowing sanctum of Shri Ram Janmbhoomi Mandir.",
+    location: "Shri Ram Janmbhoomi, Ayodhya, Uttar Pradesh, India",
+    camera: "Sony Alpha A7R V",
+    lens: "Sony FE 50mm f/1.2 GM",
+    settings: "1/200s • f/2.0 • ISO 320 • 50mm",
+    date: "January 2026",
+    tags: ["RamLalla", "Ayodhya", "RamMandir", "BhagwanRam", "Deity", "Sacred", "Spiritual"],
+  },
+  34: {
+    title: "Bhagwan Sri Krishna · Vrindavan Murti",
+    description: "The enchanting sacred deity of Lord Krishna holding a golden bansuri flute, crowned with peacock feathers (mor pankh), silk pitambar, and fresh lotus blooms in the sacred atmosphere of Braj.",
+    location: "Vrindavan, Mathura, Uttar Pradesh, India",
+    camera: "Leica SL2",
+    lens: "Leica APO-Summicron-SL 50mm f/2 ASPH",
+    settings: "1/160s • f/2.0 • ISO 400 • 50mm",
+    date: "August 2025",
+    tags: ["LordKrishna", "Vrindavan", "Mathura", "Bansuri", "Deity", "Sacred", "Bhakti"],
+  },
+  35: {
+    title: "Golden Murugan with Celestial Vel",
+    description: "The towering, brilliant golden statue of Lord Murugan (Kartikeya) holding the sacred Vel spear against lush tropical hills and golden celestial sunbeams.",
+    location: "Palani Hills, Tamil Nadu, India",
+    camera: "Nikon Z9",
+    lens: "NIKKOR Z 24-70mm f/2.8 S",
+    settings: "1/500s • f/8.0 • ISO 100 • 35mm",
+    date: "February 2026",
+    tags: ["Murugan", "Kartikeya", "Vel", "TamilNadu", "Deity", "Sacred", "HinduHeritage"],
+  },
+
+  // 🪔 Festivals & Celebrations
+  36: {
+    title: "Diwali Deepotsav on Ayodhya Ghats",
+    description: "Millions of handcrafted terracotta diyas (earthen oil lamps) illuminating Ram Ki Paidi and sacred Sarayu ghats during the world-record Deepotsav Diwali celebrations in Ayodhya.",
+    location: "Ram Ki Paidi, Ayodhya, Uttar Pradesh, India",
+    camera: "Canon EOS R5",
+    lens: "Canon RF 24-70mm f/2.8L IS USM",
+    settings: "1/50s • f/2.8 • ISO 800 • 28mm",
+    date: "November 2025",
+    tags: ["Diwali", "Deepotsav", "Ayodhya", "FestivalOfLights", "Diyas", "Festivals", "Sacred"],
+  },
+  37: {
+    title: "Lalbaugcha Raja & Ganesh Chaturthi",
+    description: "The majestic and resplendent idol of Lord Ganesha adorned with pure gold ornaments, modaks, and vibrant orange marigold garlands during the grand 10-day Ganesh Utsav.",
+    location: "Lalbaug, Mumbai, Maharashtra, India",
+    camera: "Sony Alpha A7 IV",
+    lens: "Sony FE 35mm f/1.4 GM",
+    settings: "1/250s • f/2.2 • ISO 320 • 35mm",
+    date: "September 2025",
+    tags: ["GaneshChaturthi", "GanpatiBappa", "Mumbai", "GaneshUtsav", "Festivals", "Celebration"],
+  },
+  38: {
+    title: "Maa Durga Mahishasuramardini · Durga Puja",
+    description: "The magnificent UNESCO Intangible Cultural Heritage clay idol of Goddess Durga vanquishing Mahishasura, adorned in intricate shola-pith craftsmanship amidst rhythmic dhak drums and dhunuchi smoke.",
+    location: "Baghbazar, Kolkata, West Bengal, India",
+    camera: "Fujifilm GFX 100 II",
+    lens: "Fujinon GF 45-100mm f/4 R LM OIS WR",
+    settings: "1/125s • f/4.0 • ISO 640 • 50mm",
+    date: "October 2025",
+    tags: ["DurgaPuja", "MaaDurga", "Kolkata", "Bengal", "UNESCO", "Festivals", "Heritage"],
+  },
+  39: {
+    title: "Colors of Braj · Vrindavan Holi Celebration",
+    description: "Euphoric temple courtyard celebration of Lathmar and Phoolon Ki Holi with flying plumes of organic magenta, saffron, and purple gulal colors dancing in golden sunbeams.",
+    location: "Banke Bihari Temple, Vrindavan, Uttar Pradesh, India",
+    camera: "Canon EOS R3",
+    lens: "Canon RF 24-70mm f/2.8L IS USM",
+    settings: "1/1250s • f/4.0 • ISO 250 • 35mm",
+    date: "March 2026",
+    tags: ["Holi", "Vrindavan", "Mathura", "ColorsOfIndia", "Festivals", "Joy", "Celebration"],
+  },
 };
 
 // Title-based lookup table so photos fetched from MongoDB match even with MongoDB ObjectIds
@@ -375,6 +463,14 @@ export const PHOTO_TITLE_MAP = {
   "The Blue City of Jodhpur": PHOTO_METADATA_MAP[29],
   "Lake Palace & Pichola Waters": PHOTO_METADATA_MAP[30],
   "Howrah Bridge Over Sacred Hooghly": PHOTO_METADATA_MAP[31],
+  "Adiyogi Lord Shiva · Isha Sanctum": PHOTO_METADATA_MAP[32],
+  "Lord Ram Lalla & Ayodhya Sanctum": PHOTO_METADATA_MAP[33],
+  "Bhagwan Sri Krishna · Vrindavan Murti": PHOTO_METADATA_MAP[34],
+  "Golden Murugan with Celestial Vel": PHOTO_METADATA_MAP[35],
+  "Diwali Deepotsav on Ayodhya Ghats": PHOTO_METADATA_MAP[36],
+  "Lalbaugcha Raja & Ganesh Chaturthi": PHOTO_METADATA_MAP[37],
+  "Maa Durga Mahishasuramardini · Durga Puja": PHOTO_METADATA_MAP[38],
+  "Colors of Braj · Vrindavan Holi Celebration": PHOTO_METADATA_MAP[39],
 };
 
 // Fallback generator for uploaded or dynamically added photographs

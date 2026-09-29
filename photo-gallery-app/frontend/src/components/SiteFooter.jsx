@@ -120,6 +120,16 @@ const SiteFooter = () => {
             </li>
             <li>
               <Link to="/gallery" onClick={scrollToTop}>
+                <span>🕉️ Sacred Deities &amp; Gods</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery" onClick={scrollToTop}>
+                <span>🎆 Festivals &amp; Celebrations</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery" onClick={scrollToTop}>
                 <span>🪔 Culture &amp; Ghats</span>
               </Link>
             </li>
