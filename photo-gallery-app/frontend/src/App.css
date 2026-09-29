@@ -1279,34 +1279,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .studio-submit-card [style*="linear-gradient"]:hover { background: #d9947e !important; }
 .studio-submit-card a { color: #e0a18b !important; }
 .studio-submit-card .studio-aside-kicker { color: #e0a18b !important; }
-
-.studio-profile-page { min-height: calc(100vh - 76px); padding: 48px 22px !important; background: radial-gradient(ellipse at 15% 0%, rgba(199,122,98,.13), transparent 40%), #181a16 !important; }
-.studio-profile-card { max-width: 960px !important; margin: 0 auto; border: 1px solid #3c3d36 !important; border-radius: 2px !important; background: #252720 !important; box-shadow: 0 24px 70px rgba(0,0,0,.28) !important; }
-.profile-avatar { border-radius: 50% !important; background: #c77a62 !important; color: #171914 !important; box-shadow: none !important; }
-.profile-eyebrow { color: #d9947e !important; }
-.studio-profile-card h1, .studio-profile-card h2 { color: #f3f1e9 !important; font-family: "Cormorant Garamond", serif; font-weight: 500 !important; letter-spacing: 0 !important; }
-.studio-profile-card a { color: #e0a18b !important; }
-.studio-profile-card button { border-radius: 2px !important; }
-.studio-profile-card button[style*="linear-gradient"] { background: #c77a62 !important; color: #171914 !important; }
-
-.studio-admin-page { min-height: calc(100vh - 76px); background: radial-gradient(ellipse at 15% 0%, rgba(199,122,98,.1), transparent 40%), #181a16 !important; }
-.studio-admin-container { max-width: 1320px !important; padding: 42px clamp(20px, 5vw, 68px) 64px !important; }
-.studio-admin-header h2 { color: #f3f1e9 !important; font-family: "Cormorant Garamond", serif; font-size: 42px !important; font-weight: 500 !important; text-shadow: none !important; }
-.studio-admin-header p { color: #aeb1a6 !important; text-shadow: none !important; }
-.studio-admin-header strong { color: #e0a18b; }
-.studio-admin-stats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px !important; }
-.studio-admin-stat, .studio-admin-panel { border: 1px solid #3c3d36 !important; border-radius: 2px !important; background: #252720 !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-.studio-admin-stat { padding: 17px 20px !important; }
-.studio-admin-stat span { color: #aeb1a6 !important; }
-.studio-admin-stat strong { color: #e0a18b !important; font-family: "Cormorant Garamond", serif; font-size: 32px !important; }
-.studio-admin-panels { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
-.studio-admin-panel { min-width: 0; padding: 20px !important; }
-.studio-admin-panel h3 { color: #f3f1e9 !important; font-family: "Cormorant Garamond", serif; font-size: 24px !important; font-weight: 500 !important; }
-.studio-admin-panel h3 span { color: #d9947e !important; }
-.studio-admin-panel img { border-radius: 2px !important; }
-.studio-admin-panel button { border-radius: 2px !important; }
-.studio-admin-panel button[style*="linear-gradient"] { background: #c77a62 !important; color: #171914 !important; box-shadow: none !important; }
-.studio-admin-panel button:not([style*="linear-gradient"]) { background: rgba(199,122,98,.09) !important; border-color: rgba(199,122,98,.35) !important; color: #e0a18b !important; }
+/* Studio pages (Admin & Profile) now use dedicated AdminPanel.css and Profile.css */
 
 
 
@@ -1325,11 +1298,5 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   .studio-submit-aside p { max-width: 320px; font-size: 11px; }
   .studio-submit-aside .studio-aside-caption { display: none; }
   .studio-submit-card { padding: 26px 22px !important; }
-  .studio-profile-page { padding: 26px 14px !important; }
-  .studio-profile-card { padding: 26px 18px !important; }
-  .studio-admin-container { padding: 28px 16px 44px !important; }
-  .studio-admin-header h2 { font-size: 34px !important; }
-  .studio-admin-panels { grid-template-columns: 1fr !important; }
-  .studio-admin-stats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
-  .studio-admin-stat { padding: 13px 10px !important; }
+
 }
