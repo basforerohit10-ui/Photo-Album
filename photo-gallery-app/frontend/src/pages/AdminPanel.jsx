@@ -297,54 +297,38 @@ const AdminPanel = ({ photos = [], pendingPhotos = [], onApprovePhoto, onDeleteP
           </div>
         </section>
 
-        {/* Tab Selection & Search Bar */}
+        {/* Active View Header & Search Bar (Tabs Bar removed as requested) */}
         <section id="admin-content-section" className="admin-controls-bar">
-          <div className="admin-tabs-nav" role="tablist">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "pending"}
-              onClick={() => handleCardClick("pending")}
-              className={`admin-tab-toggle ${activeTab === "pending" ? "active" : ""}`}
-            >
-              <span>Pending Review</span>
-              <span className={`tab-badge ${pendingPhotos.length > 0 ? "alert" : "neutral"}`}>
-                {pendingPhotos.length}
+          <div className="admin-active-view-heading">
+            <span
+              className={`view-dot ${
+                activeTab === "pending"
+                  ? "alert"
+                  : activeTab === "approved"
+                  ? "success"
+                  : "neutral"
+              }`}
+            />
+            <span>
+              <strong>
+                {activeTab === "pending"
+                  ? "Pending Submissions Queue"
+                  : activeTab === "approved"
+                  ? "Live Gallery Archive"
+                  : activeTab === "artists"
+                  ? "Contributing Artists Directory"
+                  : "Curated Indian Themes Matrix"}
+              </strong>{" "}
+              <span style={{ fontSize: "12px", color: "#8f9288", fontWeight: "normal" }}>
+                ({activeTab === "pending"
+                  ? `${pendingPhotos.length} awaiting review`
+                  : activeTab === "approved"
+                  ? `${approvedPhotos.length} published`
+                  : activeTab === "artists"
+                  ? `${contributorCount} artists`
+                  : `${uniqueCategoriesCount} themes`})
               </span>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "approved"}
-              onClick={() => handleCardClick("approved")}
-              className={`admin-tab-toggle ${activeTab === "approved" ? "active" : ""}`}
-            >
-              <span>Live Gallery Archive</span>
-              <span className="tab-badge neutral">{approvedPhotos.length}</span>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "artists"}
-              onClick={() => handleCardClick("artists")}
-              className={`admin-tab-toggle ${activeTab === "artists" ? "active" : ""}`}
-            >
-              <span>Contributing Artists</span>
-              <span className="tab-badge neutral">{contributorCount}</span>
-            </button>
-
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "themes"}
-              onClick={() => handleCardClick("themes")}
-              className={`admin-tab-toggle ${activeTab === "themes" ? "active" : ""}`}
-            >
-              <span>Indian Themes</span>
-              <span className="tab-badge neutral">{uniqueCategoriesCount}</span>
-            </button>
+            </span>
           </div>
 
           <div className="admin-search-wrapper">
