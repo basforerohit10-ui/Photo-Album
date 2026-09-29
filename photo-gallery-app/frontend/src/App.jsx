@@ -394,7 +394,13 @@ function AppContent() {
     api.getPhotos()
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setPhotos(data.map(enrichPhotoWithDetails));
+          // Merge DB photos with INITIAL_PHOTOS so all 39 curated photos always persist on refresh
+          const dbTitles = new Set(data.map((p) => (p.title || "").toLowerCase().trim()));
+          const missingCurated = INITIAL_PHOTOS.filter(
+            (p) => !dbTitles.has((p.title || "").toLowerCase().trim())
+          );
+          const merged = [...data, ...missingCurated];
+          setPhotos(merged.map(enrichPhotoWithDetails));
         }
       })
       .catch(() => {});
