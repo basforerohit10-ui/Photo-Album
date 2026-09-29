@@ -227,7 +227,7 @@ const SiteFooter = () => {
         <div className="footer-social-links">
           <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a>
           <span>•</span>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.instagram.com/rohit_basfore_45/" target="_blank" rel="noopener noreferrer">Instagram</a>
           <span>•</span>
           <a href="https://500px.com" target="_blank" rel="noopener noreferrer">500px</a>
           <span>•</span>
