@@ -203,15 +203,12 @@ const Register = ({ adminMode = false }) => {
                   <input
                     type="password"
                     name="adminSecurityKey"
-                    placeholder="Enter admin passkey (e.g. 2005)"
+                    placeholder="Enter passkey"
                     value={form.adminSecurityKey}
                     onChange={handleChange}
                     required
                     style={{ ...styles.input, ...styles.adminInput }}
                   />
-                  <span style={styles.hint}>
-                    Enter your studio passkey (default is 2005). Existing accounts will be upgraded to Administrator!
-                  </span>
                 </div>
               )}
 
@@ -233,8 +230,8 @@ const Register = ({ adminMode = false }) => {
                 {loading
                   ? "Processing..."
                   : isAdminRegister
-                  ? "⚡ Register / Upgrade as Admin"
-                  : "Create Contributor Account"}
+                    ? "⚡ Register / Upgrade as Admin"
+                    : "Create Contributor Account"}
               </button>
             </form>
 
@@ -244,9 +241,9 @@ const Register = ({ adminMode = false }) => {
                 {isAdminRegister ? "Sign in to Admin Portal" : "Login here"}
               </Link>
             </p>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

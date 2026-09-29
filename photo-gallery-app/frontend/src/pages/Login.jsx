@@ -116,137 +116,137 @@ const Login = ({ initialMode }) => {
 
             {/* Mode Tabs */}
             <div style={styles.tabBar}>
-            <button
-              type="button"
-              onClick={() => { setModeOverride(false); setError(""); }}
-              style={{
-                ...styles.tabBtn,
-                ...(isAdminMode ? {} : styles.tabBtnActive),
-              }}
-            >
-              Contributor Login
-            </button>
-            <button
-              type="button"
-              onClick={() => { setModeOverride(true); setError(""); }}
-              style={{
-                ...styles.tabBtn,
-                ...(isAdminMode ? styles.adminTabBtnActive : {}),
-              }}
-            >
-              🛡️ Admin Login
-            </button>
-          </div>
-
-          <div style={styles.headerBox}>
-            {isAdminMode && (
-              <span style={styles.adminBadge}>ADMINISTRATOR PORTAL</span>
-            )}
-            <h2 style={styles.title}>
-              {isAdminMode ? "Admin Sign In" : "Welcome Back"}
-            </h2>
-            <p style={styles.sub}>
-              {isAdminMode
-                ? "Enter your administrator username and password."
-                : "Sign in to browse the gallery and submit your photos."}
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.field}>
-              <label style={styles.label}>
-                {isAdminMode ? "Admin Username" : "Username"}
-              </label>
-              <input
-                type="text"
-                name="username"
-                placeholder={isAdminMode ? "Enter admin username" : "Enter your username"}
-                value={form.username}
-                onChange={handleChange}
-                required
-                style={isAdminMode ? { ...styles.input, ...styles.adminInput } : styles.input}
-              />
+              <button
+                type="button"
+                onClick={() => { setModeOverride(false); setError(""); }}
+                style={{
+                  ...styles.tabBtn,
+                  ...(isAdminMode ? {} : styles.tabBtnActive),
+                }}
+              >
+                Contributor Login
+              </button>
+              <button
+                type="button"
+                onClick={() => { setModeOverride(true); setError(""); }}
+                style={{
+                  ...styles.tabBtn,
+                  ...(isAdminMode ? styles.adminTabBtnActive : {}),
+                }}
+              >
+                🛡️ Admin Login
+              </button>
             </div>
 
-            <div style={styles.field}>
-              <label style={styles.label}>Password</label>
-              <div style={styles.passwordWrap}>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Enter your password"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                  style={{ ...(isAdminMode ? { ...styles.input, ...styles.adminInput } : styles.input), paddingRight: "4.2rem", width: "100%" }}
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.passwordToggle}>
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-            </div>
-
-            {isAdminMode && (
-              <div style={styles.field}>
-                <label style={styles.adminKeyLabel}>Admin Security Key</label>
-                <input
-                  type="password"
-                  name="adminSecurityKey"
-                  placeholder="Enter admin security key"
-                  value={form.adminSecurityKey}
-                  onChange={handleChange}
-                  required
-                  style={{ ...styles.input, ...styles.adminInput }}
-                />
-              </div>
-            )}
-
-            {error && <p style={styles.error}>{error}</p>}
-
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                ...styles.btn,
-                ...(isAdminMode ? styles.adminSubmitBtn : {}),
-                opacity: loading ? 0.7 : 1,
-              }}
-            >
-              {loading
-                ? "Signing in..."
-                : isAdminMode
-                ? "⚡ Sign in to Admin Dashboard"
-                : "Login"}
-            </button>
-          </form>
-
-          <div style={styles.footerLinks}>
-            <p style={styles.helper}>
-              Don&apos;t have an account?{" "}
-              {isAdminMode ? (
-                <span style={styles.adminRegisterLink}>Administrator accounts are provisioned by the site owner.</span>
-              ) : (
-                <Link to="/register" style={styles.link}>
-                  Register as Contributor
-                </Link>
+            <div style={styles.headerBox}>
+              {isAdminMode && (
+                <span style={styles.adminBadge}>ADMINISTRATOR PORTAL</span>
               )}
-            </p>
-            {isAdminMode && (
-              <p style={styles.subHelper}>
-                Need to submit photos instead?{" "}
-                <button
-                  type="button"
-                  onClick={() => { setModeOverride(false); setError(""); }}
-                  style={styles.textBtn}
-                >
-                  Switch to Contributor Login
-                </button>
+              <h2 style={styles.title}>
+                {isAdminMode ? "Admin Sign In" : "Welcome Back"}
+              </h2>
+              <p style={styles.sub}>
+                {isAdminMode
+                  ? "Enter your administrator username and password."
+                  : "Sign in to browse the gallery and submit your photos."}
               </p>
-            )}
+            </div>
+
+            <form onSubmit={handleSubmit} style={styles.form}>
+              <div style={styles.field}>
+                <label style={styles.label}>
+                  {isAdminMode ? "Admin Username" : "Username"}
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder={isAdminMode ? "Enter admin username" : "Enter your username"}
+                  value={form.username}
+                  onChange={handleChange}
+                  required
+                  style={isAdminMode ? { ...styles.input, ...styles.adminInput } : styles.input}
+                />
+              </div>
+
+              <div style={styles.field}>
+                <label style={styles.label}>Password</label>
+                <div style={styles.passwordWrap}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                    style={{ ...(isAdminMode ? { ...styles.input, ...styles.adminInput } : styles.input), paddingRight: "4.2rem", width: "100%" }}
+                  />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.passwordToggle}>
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
+
+              {isAdminMode && (
+                <div style={styles.field}>
+                  <label style={styles.adminKeyLabel}>Admin Security Key</label>
+                  <input
+                    type="password"
+                    name="adminSecurityKey"
+                    placeholder="Enter passkey"
+                    value={form.adminSecurityKey}
+                    onChange={handleChange}
+                    required
+                    style={{ ...styles.input, ...styles.adminInput }}
+                  />
+                </div>
+              )}
+
+              {error && <p style={styles.error}>{error}</p>}
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  ...styles.btn,
+                  ...(isAdminMode ? styles.adminSubmitBtn : {}),
+                  opacity: loading ? 0.7 : 1,
+                }}
+              >
+                {loading
+                  ? "Signing in..."
+                  : isAdminMode
+                    ? "⚡ Sign in to Admin Dashboard"
+                    : "Login"}
+              </button>
+            </form>
+
+            <div style={styles.footerLinks}>
+              <p style={styles.helper}>
+                Don&apos;t have an account?{" "}
+                {isAdminMode ? (
+                  <span style={styles.adminRegisterLink}>Administrator accounts are provisioned by the site owner.</span>
+                ) : (
+                  <Link to="/register" style={styles.link}>
+                    Register as Contributor
+                  </Link>
+                )}
+              </p>
+              {isAdminMode && (
+                <p style={styles.subHelper}>
+                  Need to submit photos instead?{" "}
+                  <button
+                    type="button"
+                    onClick={() => { setModeOverride(false); setError(""); }}
+                    style={styles.textBtn}
+                  >
+                    Switch to Contributor Login
+                  </button>
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

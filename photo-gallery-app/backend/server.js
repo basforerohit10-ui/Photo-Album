@@ -722,7 +722,7 @@ app.post("/api/auth/register", async (req, res) => {
     let role = "user";
     if (providedKey) {
       if (!isValidAdminKey(providedKey)) {
-        return res.status(401).json({ message: "Invalid Admin Security Key / Passkey. Use passkey 2005." });
+        return res.status(401).json({ message: "Invalid Admin Security Key / Passkey." });
       }
       role = "admin";
     }
@@ -792,7 +792,7 @@ app.post("/api/auth/login", async (req, res) => {
     const providedKey = req.body.adminSecurityKey?.trim();
     if (providedKey) {
       if (!isValidAdminKey(providedKey)) {
-        return res.status(401).json({ message: "Invalid Admin Security Key. Use passkey 2005." });
+        return res.status(401).json({ message: "Invalid Admin Security Key." });
       }
       if (user.role !== "admin") {
         user.role = "admin";
