@@ -595,21 +595,45 @@ app.post("/api/auth/register", async (req, res) => {
     const fullName = req.body.fullName?.trim();
     const username = req.body.username?.trim().toLowerCase();
     const password = req.body.password;
+    const providedKey = req.body.adminSecurityKey?.trim();
+
     if (!fullName || !username || !password) {
       return res.status(400).json({ message: "Please fill in all fields." });
     }
     if (password.length < 6) {
       return res.status(400).json({ message: "Password must be at least 6 characters." });
     }
-    if (await User.exists({ username })) {
+
+    let role = "user";
+    if (providedKey) {
+      if (providedKey !== adminSecurityKey.trim()) {
+        return res.status(401).json({ message: "Invalid Admin Security Key / Passkey." });
+      }
+      role = "admin";
+    }
+
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      // If user exists and provides valid admin security key + correct password, upgrade them!
+      if (role === "admin" && (await bcrypt.compare(password, existingUser.passwordHash))) {
+        existingUser.role = "admin";
+        if (fullName) existingUser.fullName = fullName;
+        await existingUser.save();
+        return res.status(200).json({
+          message: "Account upgraded to Administrator successfully! Please log in as Admin.",
+          role: "admin",
+        });
+      }
       return res.status(409).json({ message: "This username is already taken." });
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ fullName, username, passwordHash, role: "user" });
+    await User.create({ fullName, username, passwordHash, role });
     res.status(201).json({
-      message: "Registration successful. Please log in.",
-      role: "user",
+      message: role === "admin"
+        ? "Administrator account created successfully! Please sign in with your Admin credentials."
+        : "Registration successful. Please log in.",
+      role,
     });
   } catch (error) {
     console.error("Registration error:", error);
@@ -649,8 +673,19 @@ app.post("/api/auth/login", async (req, res) => {
     if (!user || !(await bcrypt.compare(req.body.password || "", user.passwordHash))) {
       return res.status(401).json({ message: "Invalid username or password." });
     }
-    if (user.role === "admin" && req.body.adminSecurityKey !== adminSecurityKey) {
-      return res.status(401).json({ message: "Invalid Admin Security Key." });
+
+    const providedKey = req.body.adminSecurityKey?.trim();
+    if (providedKey) {
+      if (providedKey !== adminSecurityKey.trim()) {
+        return res.status(401).json({ message: "Invalid Admin Security Key." });
+      }
+      if (user.role !== "admin") {
+        user.role = "admin";
+        await user.save();
+        console.log(`Auto-upgraded user ${user.username} to administrator via security key.`);
+      }
+    } else if (user.role === "admin") {
+      return res.status(401).json({ message: "Admin Security Key is required for administrator accounts." });
     }
 
     res.json({

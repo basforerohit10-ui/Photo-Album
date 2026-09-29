@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Register = ({ adminMode = false }) => {
+  const [isAdminRegister, setIsAdminRegister] = useState(adminMode);
   const [form, setForm] = useState({
     fullName: "",
     username: "",
     password: "",
+    adminSecurityKey: "",
   });
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
@@ -28,9 +30,10 @@ const Register = ({ adminMode = false }) => {
       fullName: form.fullName,
       username: form.username,
       password: form.password,
+      ...(isAdminRegister || adminMode ? { adminSecurityKey: form.adminSecurityKey } : {}),
     };
 
-    const result = adminMode
+    const result = adminMode && user?.token
       ? await registerAdmin(user.token, payload)
       : await register(payload);
     setLoading(false);
@@ -39,7 +42,7 @@ const Register = ({ adminMode = false }) => {
 
     if (result.ok) {
       setTimeout(() => {
-        navigate(adminMode ? "/admin" : "/login");
+        navigate(adminMode || isAdminRegister ? "/login" : "/login");
       }, 1200);
     }
   };
@@ -62,7 +65,7 @@ const Register = ({ adminMode = false }) => {
             type="button"
             onClick={handleBack}
             className="studio-back-btn"
-            title={adminMode ? "Return to admin panel" : "Return to gallery"}
+            title={adminMode || isAdminRegister ? "Return to admin panel" : "Return to gallery"}
           >
             <svg
               width="17"
@@ -86,7 +89,7 @@ const Register = ({ adminMode = false }) => {
             <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
             <div>
               <h1>Make room<br />for your vision.</h1>
-              <p>{adminMode ? "Create a trusted studio administrator account." : "Join the collection and share photographs that see the world your way."}</p>
+              <p>{isAdminRegister ? "Create an administrator account with studio management privileges." : "Join the collection and share photographs that see the world your way."}</p>
             </div>
             <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
           </aside>
@@ -114,84 +117,133 @@ const Register = ({ adminMode = false }) => {
               <span>{adminMode ? "Back to Admin" : "Back"}</span>
             </button>
 
+            {/* Mode Switch Tabs: Contributor vs Admin */}
             <div style={styles.tabBar}>
-              <Link to={adminMode ? "/admin" : "/register"} style={{ ...styles.tabBtn, ...styles.tabBtnActive }}>
-                {adminMode ? "Admin dashboard" : "Register"}
-              </Link>
-              <Link to="/login" style={styles.tabBtn}>
-                Login
-              </Link>
-          </div>
-
-          <div style={styles.headerBox}>
-            <h2 style={styles.title}>{adminMode ? "Register an administrator" : "Create account"}</h2>
-            <p style={styles.sub}>{adminMode ? "Set up the admin's name, username, and password. The separate passcode is entered at sign in." : "Join the gallery community and submit your photography as a contributor."}</p>
-          </div>
-
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.field}>
-              <label style={styles.label}>Full Name</label>
-              <input
-                type="text"
-                name="fullName"
-                placeholder="e.g. Rohit Basfore"
-                value={form.fullName}
-                onChange={handleChange}
-                required
-                style={styles.input}
-              />
+              <button
+                type="button"
+                onClick={() => { setIsAdminRegister(false); setMessage(""); }}
+                style={{
+                  ...styles.tabBtn,
+                  ...(!isAdminRegister ? styles.tabBtnActive : {}),
+                }}
+              >
+                Contributor Account
+              </button>
+              <button
+                type="button"
+                onClick={() => { setIsAdminRegister(true); setMessage(""); }}
+                style={{
+                  ...styles.tabBtn,
+                  ...(isAdminRegister ? styles.adminTabBtnActive : {}),
+                }}
+              >
+                🛡️ Admin Account
+              </button>
             </div>
 
-            <div style={styles.field}>
-              <label style={styles.label}>Username</label>
-              <input
-                type="text"
-                name="username"
-                placeholder="Choose a username"
-                value={form.username}
-                onChange={handleChange}
-                required
-                style={styles.input}
-              />
+            <div style={styles.headerBox}>
+              {isAdminRegister && (
+                <span style={styles.adminBadge}>ADMIN PRIVILEGES</span>
+              )}
+              <h2 style={styles.title}>{isAdminRegister ? "Register as Administrator" : "Create account"}</h2>
+              <p style={styles.sub}>{isAdminRegister ? "Set up your admin name, username, password and enter your secret passkey." : "Join the gallery community and submit your photography as a contributor."}</p>
             </div>
 
-            <div style={styles.field}>
-              <label style={styles.label}>Password (min. 6 chars)</label>
-              <div style={styles.passwordWrap}>
+            <form onSubmit={handleSubmit} style={styles.form}>
+              <div style={styles.field}>
+                <label style={styles.label}>Full Name</label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Create a secure password"
-                  value={form.password}
+                  type="text"
+                  name="fullName"
+                  placeholder="e.g. Rohit Basfore"
+                  value={form.fullName}
                   onChange={handleChange}
                   required
-                  style={styles.passwordInput}
+                  style={isAdminRegister ? { ...styles.input, ...styles.adminInput } : styles.input}
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.passwordToggle}>
-                  {showPassword ? "Hide" : "Show"}
-                </button>
               </div>
-            </div>
 
+              <div style={styles.field}>
+                <label style={styles.label}>Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder={isAdminRegister ? "Choose admin username (e.g. rohit45)" : "Choose a username"}
+                  value={form.username}
+                  onChange={handleChange}
+                  required
+                  style={isAdminRegister ? { ...styles.input, ...styles.adminInput } : styles.input}
+                />
+              </div>
 
-            {message && (
-              <p style={isSuccess ? styles.successMsg : styles.errorMsg}>
-                {message}
-              </p>
-            )}
+              <div style={styles.field}>
+                <label style={styles.label}>Password (min. 6 chars)</label>
+                <div style={styles.passwordWrap}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Create a secure password"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                    style={{
+                      ...styles.passwordInput,
+                      ...(isAdminRegister ? styles.adminInput : {}),
+                    }}
+                  />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.passwordToggle}>
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              style={{ ...styles.btn, opacity: loading ? 0.7 : 1 }}
-            >
-              {loading ? "Creating account..." : adminMode ? "Create admin account" : "Create account"}
-            </button>
-          </form>
+              {isAdminRegister && (
+                <div style={styles.field}>
+                  <label style={styles.adminKeyLabel}>Admin Security Passkey *</label>
+                  <input
+                    type="password"
+                    name="adminSecurityKey"
+                    placeholder="Enter admin passkey (e.g. 2005)"
+                    value={form.adminSecurityKey}
+                    onChange={handleChange}
+                    required
+                    style={{ ...styles.input, ...styles.adminInput }}
+                  />
+                  <span style={styles.hint}>
+                    Enter your studio passkey (default is 2005). Existing accounts will be upgraded to Administrator!
+                  </span>
+                </div>
+              )}
 
-          <p style={styles.helper}>
-            {adminMode ? "Admin accounts use the separate admin sign-in passcode." : <>Already have an account?{" "}<Link to="/login" style={styles.link}>Login here</Link></>}
-          </p>
+              {message && (
+                <p style={isSuccess ? styles.successMsg : styles.errorMsg}>
+                  {message}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  ...styles.btn,
+                  ...(isAdminRegister ? styles.adminBtn : {}),
+                  opacity: loading ? 0.7 : 1,
+                }}
+              >
+                {loading
+                  ? "Processing..."
+                  : isAdminRegister
+                  ? "⚡ Register / Upgrade as Admin"
+                  : "Create Contributor Account"}
+              </button>
+            </form>
+
+            <p style={styles.helper}>
+              Already have an account?{" "}
+              <Link to="/login" style={isAdminRegister ? styles.adminLoginLink : styles.link}>
+                {isAdminRegister ? "Sign in to Admin Portal" : "Login here"}
+              </Link>
+            </p>
         </div>
       </div>
     </div>
