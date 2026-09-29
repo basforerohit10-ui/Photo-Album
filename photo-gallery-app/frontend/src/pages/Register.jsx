@@ -44,25 +44,83 @@ const Register = ({ adminMode = false }) => {
     }
   };
 
+  const handleBack = () => {
+    if (adminMode) {
+      navigate("/admin");
+    } else if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate("/gallery");
+    }
+  };
+
   return (
     <div style={styles.page} className="studio-auth-page">
-      <div style={styles.container} className="studio-auth-layout">
-        <aside className="studio-auth-aside">
-          <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
-          <div>
-            <h1>Make room<br />for your vision.</h1>
-            <p>{adminMode ? "Create a trusted studio administrator account." : "Join the collection and share photographs that see the world your way."}</p>
-          </div>
-          <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
-        </aside>
-        <div style={styles.box} className="studio-auth-card">
-          <div style={styles.tabBar}>
-            <Link to={adminMode ? "/admin" : "/register"} style={{ ...styles.tabBtn, ...styles.tabBtnActive }}>
-              {adminMode ? "Admin dashboard" : "Register"}
-            </Link>
-            <Link to="/login" style={styles.tabBtn}>
-              Login
-            </Link>
+      <div className="studio-auth-shell">
+        <div className="studio-back-nav-bar">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="studio-back-btn"
+            title={adminMode ? "Return to admin panel" : "Return to gallery"}
+          >
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>{adminMode ? "Back to Admin Panel" : "Back to Gallery"}</span>
+          </button>
+        </div>
+
+        <div style={styles.container} className="studio-auth-layout">
+          <aside className="studio-auth-aside">
+            <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
+            <div>
+              <h1>Make room<br />for your vision.</h1>
+              <p>{adminMode ? "Create a trusted studio administrator account." : "Join the collection and share photographs that see the world your way."}</p>
+            </div>
+            <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
+          </aside>
+          <div style={styles.box} className="studio-auth-card">
+            {/* Mobile / Card-level Back Button */}
+            <button
+              type="button"
+              onClick={handleBack}
+              className="studio-card-back-btn"
+              title={adminMode ? "Return to admin panel" : "Return to gallery"}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>{adminMode ? "Back to Admin" : "Back"}</span>
+            </button>
+
+            <div style={styles.tabBar}>
+              <Link to={adminMode ? "/admin" : "/register"} style={{ ...styles.tabBtn, ...styles.tabBtnActive }}>
+                {adminMode ? "Admin dashboard" : "Register"}
+              </Link>
+              <Link to="/login" style={styles.tabBtn}>
+                Login
+              </Link>
           </div>
 
           <div style={styles.headerBox}>
@@ -136,6 +194,7 @@ const Register = ({ adminMode = false }) => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

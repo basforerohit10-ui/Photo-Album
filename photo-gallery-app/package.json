@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --config frontend/vite.config.js",
     "server": "node backend/server.js",
+    "start": "node backend/server.js",
     "dev:full": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "vite build --config frontend/vite.config.js",
     "lint": "oxlint",

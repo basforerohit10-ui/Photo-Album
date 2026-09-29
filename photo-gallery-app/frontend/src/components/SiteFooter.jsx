@@ -76,7 +76,7 @@ const SiteFooter = () => {
           </Link>
 
           <p className="footer-brand-desc">
-            An independent visual archive celebrating silence, geometric light, and human emotion across diverse landscapes worldwide.
+            An independent visual archive celebrating the timeless heritage, sacred temples, natural wonders, and vibrant landscapes of Incredible India.
           </p>
 
           <div className="footer-status-pill">
@@ -95,28 +95,32 @@ const SiteFooter = () => {
           <ul className="footer-nav-list">
             <li>
               <Link to="/gallery" onClick={scrollToTop}>
-                <span>🏔️ Nature &amp; Alpine</span>
+                <span>🛕 Temples &amp; Spiritual</span>
               </Link>
             </li>
             <li>
               <Link to="/gallery" onClick={scrollToTop}>
-                <span>🏛️ Modern Architecture</span>
+                <span>🏰 Famous Monuments</span>
               </Link>
             </li>
             <li>
               <Link to="/gallery" onClick={scrollToTop}>
-                <span>🏮 Urban &amp; Street Nights</span>
+                <span>🌿 Indian Nature</span>
               </Link>
             </li>
             <li>
               <Link to="/gallery" onClick={scrollToTop}>
-                <span>🌾 Minimal &amp; Still Life</span>
+                <span>🏔️ Himalayas &amp; Deserts</span>
               </Link>
             </li>
             <li>
               <Link to="/gallery" onClick={scrollToTop}>
-                <span>❤️ Community Favorites</span>
-                <span className="footer-badge-hint">HOT</span>
+                <span>🐅 Wildlife of India</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/gallery" onClick={scrollToTop}>
+                <span>🪔 Culture &amp; Ghats</span>
               </Link>
             </li>
           </ul>

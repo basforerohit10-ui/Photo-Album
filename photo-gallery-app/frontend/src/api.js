@@ -1,4 +1,15 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
+// Cleanly resolve the API Base URL:
+// - If VITE_API_URL is "https://example.com" -> "https://example.com/api"
+// - If VITE_API_URL is "https://example.com/api" -> "https://example.com/api"
+// - If VITE_API_URL is not set -> "/api" (same domain, works on local & Vercel serverless)
+const getApiBaseUrl = () => {
+  const envUrl = (import.meta.env.VITE_API_URL || "").trim();
+  if (!envUrl) return "/api";
+  const cleaned = envUrl.replace(/\/+$/, "");
+  return cleaned.endsWith("/api") ? cleaned : `${cleaned}/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const request = async (path, options = {}) => {
   let response;
@@ -8,10 +19,30 @@ const request = async (path, options = {}) => {
       headers: { "Content-Type": "application/json", ...(options.headers || {}) },
     });
   } catch {
-    throw new Error("Unable to connect to the server. Start MongoDB and the API server, then try again.");
+    throw new Error(
+      "Unable to connect to the API server. Please check your internet connection and verify the backend is running."
+    );
   }
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.message || "Something went wrong.");
+
+  const contentType = response.headers.get("content-type") || "";
+  let data;
+
+  if (contentType.includes("application/json")) {
+    data = await response.json().catch(() => ({}));
+  } else {
+    // If the server returned HTML (e.g. Vercel SPA rewrite fallback or 404 page)
+    const textSnippet = (await response.text().catch(() => "")).slice(0, 120);
+    if (textSnippet.includes("<!DOCTYPE") || textSnippet.includes("<html")) {
+      throw new Error(
+        `Backend API endpoint not reached at ${API_BASE_URL}${path}. Please verify backend deployment and environment settings.`
+      );
+    }
+    data = { message: textSnippet || "Non-JSON response from server." };
+  }
+
+  if (!response.ok) {
+    throw new Error(data.message || `Request failed with status ${response.status}`);
+  }
   return data;
 };
 

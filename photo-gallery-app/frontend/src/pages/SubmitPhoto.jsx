@@ -10,7 +10,7 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
   const [uploadType, setUploadType] = useState("file"); // "file" | "url"
   const [form, setForm] = useState({
     title: "",
-    category: "Nature",
+    category: "Temples & Spiritual",
     url: "",
     description: "",
     location: "",
@@ -103,7 +103,7 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
           ? "✓ Photo published directly to the live gallery!"
           : "✓ Photo submitted successfully! It is now in the review queue for admin approval."
       );
-      setForm({ title: "", category: "Nature", url: "", description: "", location: "", camera: "", tags: "" });
+      setForm({ title: "", category: "Temples & Spiritual", url: "", description: "", location: "", camera: "", tags: "" });
       setImagePreview("");
       if (fileInputRef.current) fileInputRef.current.value = "";
 
@@ -118,22 +118,80 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
     }
   };
 
+  const handleBack = () => {
+    if (user?.role === "admin") {
+      navigate("/admin");
+    } else if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate("/gallery");
+    }
+  };
+
   return (
     <div style={styles.page} className="studio-submit-page">
-      <div style={styles.container} className="studio-submit-layout">
-        <aside className="studio-submit-aside">
-          <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
-          <div>
-            <h1>Every frame<br />has a story.</h1>
-            <p>Choose a photograph that deserves a place in the collection.</p>
-          </div>
-          <span className="studio-aside-caption">SHARE YOUR PERSPECTIVE</span>
-        </aside>
-        <div style={styles.card} className="studio-submit-card">
-          <div style={styles.header}>
-            {user?.role === "admin" && (
-              <span style={styles.adminBadge}>ADMIN DIRECT PUBLISH</span>
-            )}
+      <div className="studio-submit-shell">
+        <div className="studio-back-nav-bar">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="studio-back-btn"
+            title={user?.role === "admin" ? "Return to admin panel" : "Return to gallery"}
+          >
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>{user?.role === "admin" ? "Back to Admin Panel" : "Back to Gallery"}</span>
+          </button>
+        </div>
+
+        <div style={styles.container} className="studio-submit-layout">
+          <aside className="studio-submit-aside">
+            <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
+            <div>
+              <h1>Every frame<br />has a story.</h1>
+              <p>Choose a photograph that deserves a place in the collection.</p>
+            </div>
+            <span className="studio-aside-caption">SHARE YOUR PERSPECTIVE</span>
+          </aside>
+          <div style={styles.card} className="studio-submit-card">
+            {/* Mobile / Card-level Back Button */}
+            <button
+              type="button"
+              onClick={handleBack}
+              className="studio-card-back-btn"
+              title={user?.role === "admin" ? "Return to admin panel" : "Return to gallery"}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>{user?.role === "admin" ? "Back to Admin" : "Back"}</span>
+            </button>
+
+            <div style={styles.header}>
+              {user?.role === "admin" && (
+                <span style={styles.adminBadge}>ADMIN DIRECT PUBLISH</span>
+              )}
             <h2 style={styles.title}>Submit Photography</h2>
             <p style={styles.sub}>
               {user?.role === "admin"
@@ -164,12 +222,12 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
                 onChange={handleChange}
                 style={styles.select}
               >
-                <option value="Nature">Nature</option>
-                <option value="Architecture">Architecture</option>
-                <option value="Urban">Urban</option>
-                <option value="Minimal">Minimal</option>
-                <option value="Wildlife">Wildlife</option>
-                <option value="Portrait">Portrait</option>
+                <option value="Temples & Spiritual">🛕 Temples &amp; Spiritual (Mandir &amp; Dharmik Sthal)</option>
+                <option value="Famous Monuments">🏰 Famous Monuments (Aitihasik Smarak &amp; Kile)</option>
+                <option value="Indian Nature">🌿 Indian Nature (Prakriti, Jheel &amp; Nadiyan)</option>
+                <option value="Himalayas & Deserts">🏔️ Himalayas &amp; Deserts (Himalaya &amp; Registan)</option>
+                <option value="Wildlife of India">🐅 Wildlife of India (Bhartiya Vanyajeev)</option>
+                <option value="Culture & Ghats">🪔 Culture &amp; Ghats (Ghat, Utsav &amp; Sanskriti)</option>
               </select>
             </div>
 
@@ -193,7 +251,7 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
                 <input
                   type="text"
                   name="location"
-                  placeholder="e.g. Manali, Himachal or Tokyo, Japan"
+                  placeholder="e.g. Kedarnath, Varanasi, Jaipur, Munnar, Agra..."
                   value={form.location}
                   onChange={handleChange}
                   style={styles.input}
@@ -218,7 +276,7 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
               <input
                 type="text"
                 name="tags"
-                placeholder="e.g. Mountains, Sunset, Golden Hour"
+                placeholder="e.g. Temple, Heritage, Himalayas, Sunset, Ganges, Tiger"
                 value={form.tags}
                 onChange={handleChange}
                 style={styles.input}
@@ -341,6 +399,7 @@ const SubmitPhoto = ({ onSubmitPhoto }) => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

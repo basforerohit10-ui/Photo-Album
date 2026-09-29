@@ -1,4 +1,5 @@
 import React from "react";
+import { CATEGORY_ICONS } from "../data/photoDetails";
 
 const PhotoCard = ({ photo, onToggleFavorite, onDelete, isAdmin, onOpenModal }) => {
   const locationShort = photo.location ? photo.location.split(",")[0].trim() : null;
@@ -14,7 +15,10 @@ const PhotoCard = ({ photo, onToggleFavorite, onDelete, isAdmin, onOpenModal }) 
       >
         <img src={photo.url} alt={photo.title} loading="lazy" />
         <div className="photo-card-overlay">
-          <span className="photo-category">{photo.category}</span>
+          <span className="photo-category">
+            {CATEGORY_ICONS[photo.category] ? `${CATEGORY_ICONS[photo.category]} ` : ""}
+            {photo.category}
+          </span>
           {locationShort && (
             <span className="photo-card-location">📍 {locationShort}</span>
           )}

@@ -1173,7 +1173,71 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
-.studio-auth-page { min-height: calc(100vh - 76px); display: flex; align-items: center; padding: 42px 24px !important; background: radial-gradient(ellipse at 15% 100%, rgba(199,122,98,.12), transparent 45%), #181a16 !important; }
+.studio-auth-page { min-height: calc(100vh - 76px); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 32px 24px !important; background: radial-gradient(ellipse at 15% 100%, rgba(199,122,98,.12), transparent 45%), #181a16 !important; }
+.studio-auth-shell { display: flex; flex-direction: column; gap: 14px; max-width: 1000px; width: 100%; margin: 0 auto; }
+.studio-back-nav-bar { display: flex; align-items: center; justify-content: flex-start; width: 100%; }
+.studio-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(37, 39, 32, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #dadbd3;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  font-family: inherit;
+}
+.studio-back-btn:hover {
+  background: rgba(199, 122, 98, 0.18);
+  border-color: rgba(199, 122, 98, 0.5);
+  color: #ffffff;
+  transform: translateX(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+.studio-back-btn svg {
+  transition: transform 0.22s ease;
+}
+.studio-back-btn:hover svg {
+  transform: translateX(-3px);
+}
+.studio-card-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+  align-self: flex-start;
+  font-family: inherit;
+}
+.studio-card-back-btn:hover {
+  background: rgba(199, 122, 98, 0.15);
+  border-color: rgba(199, 122, 98, 0.4);
+  color: #ffffff;
+  transform: translateX(-2px);
+}
+.studio-card-back-btn svg {
+  transition: transform 0.2s ease;
+}
+.studio-card-back-btn:hover svg {
+  transform: translateX(-2px);
+}
 .studio-auth-layout { display: grid !important; grid-template-columns: .9fr 1.1fr; max-width: 1000px; width: 100%; margin: 0 auto; padding: 0 !important; overflow: hidden; border: 1px solid #3c3d36; background: #252720; box-shadow: 0 28px 80px rgba(0,0,0,.28); }
 .studio-auth-aside { position: relative; z-index: 0; min-height: 540px; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: clamp(28px, 5vw, 58px); overflow: hidden; background: #30332a; color: #f3f1e9; }
 .studio-auth-aside::before { position: absolute; z-index: -2; inset: 0; content: ""; background: url("https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=85") center / cover; opacity: .58; }
@@ -1196,7 +1260,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .studio-auth-card .error { padding: 10px 12px; border-left: 2px solid #d27a68; background: rgba(210,122,104,.08); }
 .studio-auth-card .successMsg { color: #b6d7af !important; }
 
-.studio-submit-page { min-height: calc(100vh - 76px); display: flex; align-items: center; padding: 34px 22px !important; background: radial-gradient(ellipse at 12% 100%, rgba(199,122,98,.12), transparent 46%), #181a16 !important; }
+.studio-submit-page { min-height: calc(100vh - 76px); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 32px 22px !important; background: radial-gradient(ellipse at 12% 100%, rgba(199,122,98,.12), transparent 46%), #181a16 !important; }
+.studio-submit-shell { display: flex; flex-direction: column; gap: 14px; max-width: 1120px; width: 100%; margin: 0 auto; }
 .studio-submit-layout { display: grid !important; grid-template-columns: .8fr 1.2fr; max-width: 1120px; width: 100%; margin: 0 auto; padding: 0 !important; overflow: hidden; border: 1px solid #3c3d36; background: #252720; box-shadow: 0 28px 80px rgba(0,0,0,.28); }
 .studio-submit-aside { position: relative; z-index: 0; min-height: 680px; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: clamp(28px, 4vw, 54px); overflow: hidden; background: #30332a; color: #f3f1e9; }
 .studio-submit-aside::before { position: absolute; z-index: -2; inset: 0; content: ""; background: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85") center / cover; opacity: .58; }

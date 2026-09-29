@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { enrichPhotoWithDetails } from "../data/photoDetails";
+import { enrichPhotoWithDetails, CATEGORY_ICONS } from "../data/photoDetails";
 import { useToast } from "../context/ToastContext";
 import "./PhotoDetailModal.css";
 
@@ -147,7 +147,10 @@ const PhotoDetailModal = ({
         {/* Modal Top Bar */}
         <header className="pdm-topbar">
           <div className="pdm-topbar-left">
-            <span className="pdm-category-badge">{enriched.category}</span>
+            <span className="pdm-category-badge">
+              {CATEGORY_ICONS[enriched.category] ? `${CATEGORY_ICONS[enriched.category]} ` : ""}
+              {enriched.category}
+            </span>
             {currentIndex >= 0 && (
               <span className="pdm-counter">
                 Photo <strong>{currentIndex + 1}</strong> of{" "}
@@ -360,7 +363,10 @@ const PhotoDetailModal = ({
 
                 <div className="pdm-meta-item">
                   <span className="pdm-meta-label">🎨 Collection Category</span>
-                  <strong className="pdm-meta-value">{enriched.category}</strong>
+                  <strong className="pdm-meta-value">
+                    {CATEGORY_ICONS[enriched.category] ? `${CATEGORY_ICONS[enriched.category]} ` : ""}
+                    {enriched.category}
+                  </strong>
                 </div>
               </div>
             </section>

@@ -1,326 +1,413 @@
-// Curated metadata details for photo gallery items
+// Curated metadata details for photo gallery items (Incredible India Fine-Art Collection)
+export const INDIAN_CATEGORIES = [
+  "Temples & Spiritual",
+  "Famous Monuments",
+  "Indian Nature",
+  "Himalayas & Deserts",
+  "Wildlife of India",
+  "Culture & Ghats",
+];
+
+export const CATEGORY_ICONS = {
+  All: "✨",
+  "Temples & Spiritual": "🛕",
+  "Famous Monuments": "🏰",
+  "Indian Nature": "🌿",
+  "Himalayas & Deserts": "🏔️",
+  "Wildlife of India": "🐅",
+  "Culture & Ghats": "🪔",
+};
+
 export const PHOTO_METADATA_MAP = {
+  // 🛕 Temples & Spiritual
   1: {
-    description: "A breathtaking morning panorama of jagged alpine summits piercing through soft morning fog. Captured just as the sunrise kissed the highest snow-covered ridges, casting a radiant golden reflection across the tranquil mountain basin.",
-    location: "Zermatt, Swiss Alps, Switzerland",
-    camera: "Sony Alpha A7R IV",
-    lens: "Sony FE 24-70mm f/2.8 GM",
-    settings: "1/400s • f/8.0 • ISO 100 • 35mm",
-    date: "October 2025",
-    tags: ["Alpine", "Mountains", "Sunrise", "Snow", "Landscape"],
+    title: "Harmandir Sahib · Golden Temple",
+    description: "The sanctum of Sri Harmandir Sahib gleaming with pure gold leaf across the serene holy Sarovar at twilight, embodying peace, humility, and radiant devotion.",
+    location: "Amritsar, Punjab, India",
+    camera: "Canon EOS R5",
+    lens: "Canon RF 15-35mm f/2.8L IS USM",
+    settings: "1/60s • f/4.0 • ISO 400 • 24mm",
+    date: "December 2025",
+    tags: ["GoldenTemple", "Amritsar", "Punjab", "SikhHeritage", "Temple", "Spiritual"],
   },
   2: {
-    description: "A bold brutalist study in geometric rhythm, sharp shadows, and textured raw concrete surfaces. The play of late afternoon light slices across the façade, carving out stark contrast between monolithic planes and pure architectural void.",
-    location: "Berlin, Germany",
-    camera: "Fujifilm X-T4",
-    lens: "Fujinon XF 23mm f/1.4 R",
-    settings: "1/640s • f/5.6 • ISO 160 • 23mm",
-    date: "August 2025",
-    tags: ["Brutalism", "Architecture", "Shadows", "Minimalism", "Urban"],
+    title: "Kedarnath Temple & Garhwal Peaks",
+    description: "The ancient 8th-century stone temple of Lord Shiva standing resolute at 3,583 meters altitude against the towering, snow-covered Mandakini peaks of the Garhwal Himalayas.",
+    location: "Kedarnath, Rudraprayag, Uttarakhand, India",
+    camera: "Sony Alpha A7R V",
+    lens: "Sony FE 24-70mm f/2.8 GM II",
+    settings: "1/500s • f/8.0 • ISO 100 • 35mm",
+    date: "October 2025",
+    tags: ["Kedarnath", "Shiva", "Himalayas", "Uttarakhand", "Temple", "Spiritual"],
   },
   3: {
-    description: "Vibrant neon glow and luminescent cybernetic reflections bleeding over rain-slicked asphalt in a secluded Tokyo alleyway. Captured after a midnight downpour when the lanterns and signage illuminate the silent city stillness.",
-    location: "Shinjuku, Tokyo, Japan",
-    camera: "Canon EOS R5",
-    lens: "Canon RF 50mm f/1.2L USM",
-    settings: "1/125s • f/1.4 • ISO 800 • 50mm",
+    title: "Brihadeeswarar Ancient Chola Temple",
+    description: "The UNESCO World Heritage 1,000-year-old Big Temple built by Raja Raja Chola I, showcasing colossal Dravidian granite vimana engineering and sacred sculptures.",
+    location: "Thanjavur, Tamil Nadu, India",
+    camera: "Nikon Z7 II",
+    lens: "NIKKOR Z 14-30mm f/4 S",
+    settings: "1/320s • f/7.1 • ISO 125 • 20mm",
     date: "November 2025",
-    tags: ["Tokyo", "Neon", "Night", "Rain", "Cyberpunk", "Street"],
+    tags: ["Brihadeeswarar", "Thanjavur", "TamilNadu", "Chola", "Temple", "Dravidian", "UNESCO"],
   },
   4: {
-    description: "A serene, mystical canopy of towering evergreen pines veiled in shifting Pacific Northwest mist. The morning moisture diffuses ambient forest light, creating an ethereal and tranquil mood deep within the ancient wilderness.",
-    location: "Cascade Range, Oregon, USA",
-    camera: "Nikon Z7 II",
-    lens: "NIKKOR Z 70-200mm f/2.8 VR S",
-    settings: "1/200s • f/4.0 • ISO 200 • 85mm",
-    date: "September 2025",
-    tags: ["Forest", "Mist", "Evergreens", "Serenity", "Nature"],
+    title: "Meenakshi Amman Ancient Gopuram",
+    description: "The towering, rainbow-colored southern gopuram of the ancient Meenakshi Amman Temple, adorned with thousands of sculpted deities, mythological figures, and celestial dancers.",
+    location: "Madurai, Tamil Nadu, India",
+    camera: "Sony Alpha A7R V",
+    lens: "Sony FE 16-35mm f/2.8 GM II",
+    settings: "1/640s • f/6.3 • ISO 160 • 20mm",
+    date: "February 2026",
+    tags: ["MeenakshiTemple", "Madurai", "TamilNadu", "Dravidian", "Temple", "Spiritual"],
+  },
+  5: {
+    title: "Konark Sun Temple & Black Pagoda",
+    description: "The 13th-century monumental sun chariot temple adorned with elaborately carved stone wheels, horses, and celestial dancers, celebrated as an architectural marvel of ancient India.",
+    location: "Konark, Puri, Odisha, India",
+    camera: "Nikon D850",
+    lens: "AF-S NIKKOR 24-70mm f/2.8E ED VR",
+    settings: "1/400s • f/8.0 • ISO 100 • 35mm",
+    date: "March 2026",
+    tags: ["Konark", "SunTemple", "Odisha", "UNESCO", "Temple", "Heritage"],
   },
   6: {
-    description: "Graceful curves of sculpted desert dunes stretching endlessly into an unblemished azure horizon. The windswept ripples create natural abstract gradients of gold and shadow under the burning midday sun.",
-    location: "Sossusvlei, Namib Desert, Namibia",
-    camera: "Sony Alpha A1",
-    lens: "Sony FE 16-35mm f/2.8 GM",
-    settings: "1/800s • f/9.0 • ISO 100 • 28mm",
-    date: "July 2025",
-    tags: ["Dunes", "Desert", "Minimal", "Gold", "Shadows"],
+    title: "Vittala Temple Stone Chariot",
+    description: "The world-famous monolithic stone chariot shrine dedicated to Garuda at the Vijaya Vittala temple complex among the mythical boulder-strewn landscapes of historic Hampi.",
+    location: "Hampi, Vijayanagara, Karnataka, India",
+    camera: "Fujifilm GFX 100S",
+    lens: "Fujinon GF 32-64mm f/4 R LM WR",
+    settings: "1/250s • f/8.0 • ISO 100 • 32mm",
+    date: "January 2026",
+    tags: ["Hampi", "StoneChariot", "Karnataka", "Vijayanagara", "Temple", "UNESCO", "Heritage"],
   },
   7: {
-    description: "Gentle crystal-clear turquoise waves lapping against powdery white sands on a pristine coastal shoreline. The overhead Mediterranean sun highlights the natural turquoise sea gradation and oceanic serenity.",
-    location: "Amalfi Coast, Campania, Italy",
-    camera: "Leica Q2",
-    lens: "Summilux 28mm f/1.7 ASPH",
-    settings: "1/1000s • f/5.0 • ISO 100 • 28mm",
-    date: "June 2025",
-    tags: ["Ocean", "Coast", "Turquoise", "Waves", "Summer"],
+    title: "Sacred Evening Ganga Aarti",
+    description: "The grand evening Maha Aarti with hundreds of illuminated pilgrim boats gathered on the sacred Ganga, glowing brass lamps, bells, and devotion.",
+    location: "Dashashwamedh Ghat, Varanasi, Uttar Pradesh, India",
+    camera: "Leica M11",
+    lens: "Summilux-M 35mm f/1.4 ASPH",
+    settings: "1/160s • f/1.4 • ISO 800 • 35mm",
+    date: "November 2025",
+    tags: ["GangaAarti", "Varanasi", "Spiritual", "Ghats", "Kashi", "Temple", "Devotion"],
   },
+
+  // 🏰 Famous Monuments
   8: {
-    description: "A long-exposure composition capturing streaming vehicle light trails surging beneath towering glass skyscrapers. The vibrant ribbon of red and white light contrasts with the cool steel geometry of the metropolis.",
-    location: "Lower Manhattan, New York City, USA",
-    camera: "Sony Alpha A7 IV",
-    lens: "Sony FE 24-105mm f/4 G OSS",
-    settings: "15s • f/11.0 • ISO 100 • 24mm",
-    date: "December 2025",
-    tags: ["Long Exposure", "NYC", "Cityscape", "Traffic", "Night"],
+    title: "Taj Mahal at First Light",
+    description: "The ivory-white marble mausoleum of the Taj Mahal glowing in soft amber light at the break of dawn, reflecting gracefully across the Yamuna garden pools.",
+    location: "Agra, Uttar Pradesh, India",
+    camera: "Sony Alpha A7R V",
+    lens: "Sony FE 24-70mm f/2.8 GM II",
+    settings: "1/500s • f/8.0 • ISO 100 • 35mm",
+    date: "October 2025",
+    tags: ["TajMahal", "Agra", "Mughal", "WonderOfTheWorld", "Heritage", "Monument"],
   },
   9: {
-    description: "A poetic minimalist meditation on vast open horizons where tranquil waters dissolve imperceptibly into the misty overcast sky. A testament to tranquility, negative space, and monochromatic harmony.",
-    location: "Lake Baikal, Siberia",
-    camera: "Hasselblad X1D II 50C",
-    lens: "Hasselblad XCD 45mm f/4 P",
-    settings: "1/250s • f/8.0 • ISO 100 • 45mm",
+    title: "Hawa Mahal · Palace of Winds",
+    description: "The honeycomb lattice of 953 jharokha windows on Jaipur's iconic Hawa Mahal, carved from pink and red sandstone to catch refreshing desert breezes.",
+    location: "Badi Choupad, Jaipur, Rajasthan, India",
+    camera: "Fujifilm GFX 100S",
+    lens: "Fujinon GF 32-64mm f/4 R LM WR",
+    settings: "1/320s • f/8.0 • ISO 100 • 45mm",
     date: "January 2026",
-    tags: ["Minimal", "Horizon", "Tranquility", "Lake", "Zen"],
+    tags: ["HawaMahal", "Jaipur", "PinkCity", "Rajasthan", "Architecture", "Monument"],
   },
   10: {
-    description: "Slender birch and beech trunks standing in rhythmic vertical succession, filtered by warm autumn afternoon sunlight that paints the forest floor in amber and gold.",
-    location: "Black Forest, Baden-Württemberg, Germany",
-    camera: "Fujifilm GFX 100S",
-    lens: "GF 110mm f/2 R LM WR",
-    settings: "1/160s • f/4.0 • ISO 200 • 110mm",
-    date: "October 2025",
-    tags: ["Autumn", "Forest", "Trees", "GoldenHour", "Nature"],
+    title: "India Gate War Memorial at Dusk",
+    description: "The 42-meter triumphal arch of India Gate honoring fallen soldiers with eternal remembrance along the ceremonial boulevard of New Delhi.",
+    location: "Kartavya Path, New Delhi, India",
+    camera: "Canon EOS R5",
+    lens: "Canon RF 24-70mm f/2.8L IS USM",
+    settings: "1/125s • f/4.0 • ISO 400 • 28mm",
+    date: "August 2025",
+    tags: ["IndiaGate", "NewDelhi", "Monument", "Heritage", "Evening", "Capital"],
   },
   11: {
-    description: "Looking straight up from street level into a soaring crystalline skyscraper that mirrors clouds and the open sky across hundreds of precision-engineered glass facets.",
-    location: "The City, London, United Kingdom",
-    camera: "Canon EOS R6 Mark II",
-    lens: "Canon RF 15-35mm f/2.8L IS USM",
-    settings: "1/500s • f/7.1 • ISO 100 • 15mm",
-    date: "May 2025",
-    tags: ["Skyscraper", "Modern", "Glass", "London", "Architecture"],
+    title: "Gateway of India & Arabian Sea",
+    description: "The monumental 20th-century Indo-Saracenic basalt arch overlooking Mumbai harbour and the waters of the Arabian Sea.",
+    location: "Colaba, Mumbai, Maharashtra, India",
+    camera: "Nikon Z8",
+    lens: "NIKKOR Z 24-70mm f/2.8 S",
+    settings: "1/125s • f/5.6 • ISO 250 • 28mm",
+    date: "August 2025",
+    tags: ["Mumbai", "GatewayOfIndia", "MarineDrive", "Monument", "Maharashtra"],
   },
   12: {
-    description: "Sun-drenched ocean swells breaking along a golden shoreline during the magical last minutes of twilight, leaving seafoam glistening like liquid amber.",
-    location: "Big Sur, California, USA",
-    camera: "Sony Alpha A7 III",
-    lens: "Tamron 28-75mm f/2.8 Di III",
-    settings: "1/320s • f/5.6 • ISO 100 • 50mm",
-    date: "August 2025",
-    tags: ["Sunset", "GoldenHour", "Coast", "Pacific", "Nature"],
+    title: "Qutub Minar & Historic Ruins",
+    description: "The 73-meter fluted red sandstone victory minaret of Qutub Minar, surrounded by intricately carved medieval Indo-Islamic ruins dating back to 1192 AD.",
+    location: "Mehrauli, New Delhi, India",
+    camera: "Sony Alpha A7R IV",
+    lens: "Sony FE 16-35mm f/2.8 GM",
+    settings: "1/640s • f/7.1 • ISO 100 • 18mm",
+    date: "July 2025",
+    tags: ["QutubMinar", "Delhi", "UNESCO", "Monument", "History", "Heritage"],
   },
   13: {
-    description: "The very first sliver of golden dawn bursting over rolling meadow hills, piercing early morning dew and casting long atmospheric shadows.",
-    location: "Tuscany, Italy",
-    camera: "Nikon Z8",
-    lens: "NIKKOR Z 24-120mm f/4 S",
-    settings: "1/400s • f/6.3 • ISO 64 • 70mm",
-    date: "April 2025",
-    tags: ["Sunrise", "Meadows", "FirstLight", "Italy", "Dawn"],
+    title: "Amber Fort Palace & Aravalli Ridges",
+    description: "The majestic sandstone arches, courtyards, and ramparts of Amber Fort crowning the rugged Aravalli hilltops high above Maota Lake in Jaipur.",
+    location: "Amer, Jaipur, Rajasthan, India",
+    camera: "Fujifilm X-T4",
+    lens: "Fujinon XF 10-24mm f/4 R OIS WR",
+    settings: "1/500s • f/8.0 • ISO 160 • 14mm",
+    date: "January 2026",
+    tags: ["AmberFort", "Jaipur", "Fortress", "Rajasthan", "Heritage", "Monument"],
   },
   14: {
-    description: "Dramatic storm clouds gathering across a jagged alpine ridge, with sunbeams breaking through the darkness onto emerald valleys below.",
-    location: "Dolomites, South Tyrol, Italy",
-    camera: "Sony Alpha A7R V",
-    lens: "Sony FE 70-200mm f/2.8 GM OSS II",
-    settings: "1/500s • f/8.0 • ISO 125 • 95mm",
-    date: "July 2025",
-    tags: ["Dolomites", "Storm", "Alps", "Dramatic", "Landscape"],
+    title: "Red Fort · Lal Qila",
+    description: "The formidable red sandstone fortifications and octagonal towers of Lal Qila, historic seat of the Mughal empire and symbol of Indian independence.",
+    location: "Old Delhi, India",
+    camera: "Canon EOS R5",
+    lens: "Canon RF 24-105mm f/4L IS USM",
+    settings: "1/320s • f/8.0 • ISO 100 • 28mm",
+    date: "October 2025",
+    tags: ["RedFort", "LalQila", "Delhi", "Mughal", "Monument", "UNESCO"],
   },
   15: {
-    description: "Mirror-like glacial lake reflections during the peaceful blue hour, where still alpine waters reflect silent peaks and indigo skies in utter calm.",
-    location: "Lake Louise, Banff National Park, Canada",
-    camera: "Canon EOS R5",
-    lens: "Canon RF 24-70mm f/2.8L",
-    settings: "4s • f/8.0 • ISO 100 • 28mm",
-    date: "September 2025",
-    tags: ["Banff", "BlueHour", "Reflection", "GlacialLake", "Canada"],
+    title: "Victoria Memorial Marble Palace",
+    description: "The grand classical white Makrana marble monument of Victoria Memorial, surrounded by sweeping landscaped water bodies in the heart of Kolkata.",
+    location: "Queen's Way, Kolkata, West Bengal, India",
+    camera: "Nikon D850",
+    lens: "AF-S NIKKOR 24-70mm f/2.8E ED VR",
+    settings: "1/400s • f/8.0 • ISO 100 • 35mm",
+    date: "December 2025",
+    tags: ["VictoriaMemorial", "Kolkata", "Bengal", "Marble", "Monument", "History"],
   },
   16: {
-    description: "Frothy Atlantic waves crashing against dark volcanic sea cliffs, sending salty ocean mist and sea spray dancing through the crisp ocean breeze.",
-    location: "Reynisfjara, Southern Iceland",
-    camera: "Fujifilm X-T5",
-    lens: "Fujinon XF 16-55mm f/2.8 R LM WR",
-    settings: "1/1000s • f/4.0 • ISO 250 • 35mm",
-    date: "November 2025",
-    tags: ["Iceland", "Ocean", "Waves", "Cliffs", "Atmosphere"],
+    title: "Mysore Palace Illuminated Grandeur",
+    description: "The world-renowned Amba Vilas Palace with its magnificent Indo-Saracenic domes, arches, and grand royal courtyards.",
+    location: "Sayyaji Rao Road, Mysuru, Karnataka, India",
+    camera: "Sony Alpha A7 IV",
+    lens: "Sony FE 24-105mm f/4 G OSS",
+    settings: "1/40s • f/4.0 • ISO 800 • 30mm",
+    date: "October 2025",
+    tags: ["MysorePalace", "Karnataka", "Royal", "Monument", "Heritage"],
   },
+
+  // 🌿 Indian Nature
   17: {
-    description: "Vibrant blooming wildflowers covering subalpine meadows in a kaleidoscope of purple, yellow, and red blossoms beneath towering granite cliffs.",
-    location: "Valley of Flowers, Uttarakhand, India",
-    camera: "Sony Alpha A7C II",
-    lens: "Sony FE 35mm f/1.4 GM",
-    settings: "1/640s • f/2.8 • ISO 100 • 35mm",
-    date: "August 2025",
-    tags: ["Wildflowers", "Himalayas", "Flowers", "Spring", "Colors"],
+    title: "Kerala Backwaters Houseboat",
+    description: "Traditional wooden kettuvallam houseboats gliding peacefully through tranquil labyrinthine canals fringed by swaying coconut palms in emerald Kerala.",
+    location: "Alappuzha (Alleppey), Kerala, India",
+    camera: "Sony Alpha A7 IV",
+    lens: "Sony FE 24-105mm f/4 G OSS",
+    settings: "1/400s • f/5.6 • ISO 160 • 40mm",
+    date: "September 2025",
+    tags: ["Kerala", "Alleppey", "Backwaters", "Nature", "Houseboat", "Peace"],
   },
   18: {
-    description: "An idyllic high-altitude summer meadow carpeted with lush green grass, rustic wooden cabins, and soaring glacial peaks in the background.",
-    location: "Grindelwald, Bernese Oberland, Switzerland",
-    camera: "Leica SL2",
-    lens: "Vario-Elmarit-SL 24-70mm f/2.8 ASPH",
-    settings: "1/500s • f/6.3 • ISO 100 • 40mm",
-    date: "July 2025",
-    tags: ["Switzerland", "Meadow", "Alps", "Summer", "Landscape"],
+    title: "Munnar Emerald Tea Plantations",
+    description: "Rolling velvet-green tea garden hills carpeted across the cloud-draped slopes of Munnar in the Western Ghats biodiversity hotspot.",
+    location: "Munnar, Idukki, Kerala, India",
+    camera: "Canon EOS R5",
+    lens: "Canon RF 24-105mm f/4L IS USM",
+    settings: "1/320s • f/7.1 • ISO 100 • 50mm",
+    date: "August 2025",
+    tags: ["Munnar", "TeaGardens", "WesternGhats", "Greenery", "Nature", "Kerala"],
   },
   19: {
-    description: "Clean intersecting architectural planes, sharp geometric overhangs, and warm natural cedar wood accents meeting polished steel framing.",
-    location: "Kyoto Modern Art Annex, Kyoto, Japan",
-    camera: "Sony Alpha A7R IV",
-    lens: "Zeiss Batis 25mm f/2",
-    settings: "1/320s • f/5.6 • ISO 100 • 25mm",
-    date: "March 2025",
-    tags: ["Minimalism", "Japan", "Geometry", "Modern", "Design"],
+    title: "Dal Lake Shikara in Morning Mist",
+    description: "A hand-carved wooden shikara boat gliding through the crystal stillness of Dal Lake at first light, framed by floating water lilies and the misty snowline of the Pir Panjal mountains.",
+    location: "Dal Lake, Srinagar, Jammu & Kashmir, India",
+    camera: "Hasselblad X2D 100C",
+    lens: "XCD 55mm f/2.5 V",
+    settings: "1/200s • f/4.0 • ISO 100 • 55mm",
+    date: "October 2025",
+    tags: ["Kashmir", "DalLake", "Srinagar", "Shikara", "Mountains", "Nature", "HeavenOnEarth"],
   },
   20: {
-    description: "Sculptural white concrete spiral architecture spiraling upwards, celebrating form, fluidity, and natural ambient skylight diffusion.",
-    location: "Valencia City of Arts and Sciences, Spain",
-    camera: "Nikon Z7",
-    lens: "NIKKOR Z 14-30mm f/4 S",
-    settings: "1/400s • f/8.0 • ISO 100 • 18mm",
-    date: "May 2025",
-    tags: ["Curvature", "WhiteConcrete", "Modernism", "Sculpture", "Spain"],
+    title: "Palolem Palms & Arabian Sunset",
+    description: "Pristine crescent bay with gentle rolling waves, fishing boats, and palm-topped headlands overlooking the Arabian Sea.",
+    location: "Palolem Beach, South Goa, India",
+    camera: "Sony Alpha A1",
+    lens: "Sony FE 35mm f/1.4 GM",
+    settings: "1/800s • f/4.0 • ISO 100 • 35mm",
+    date: "December 2025",
+    tags: ["Goa", "Palolem", "Sunset", "Beach", "Nature", "Coastal"],
   },
   21: {
-    description: "Rhythmic rows of structural timber louvers creating an intricate optical pattern of repeating lines, warmth, and textured shadows.",
-    location: "National Stadium, Tokyo, Japan",
-    camera: "Canon EOS R3",
-    lens: "Canon RF 70-200mm f/4L IS USM",
-    settings: "1/250s • f/4.0 • ISO 200 • 135mm",
-    date: "October 2025",
-    tags: ["Patterns", "Wood", "Lines", "Tokyo", "Architecture"],
-  },
-  22: {
-    description: "Pedestrians under glowing umbrellas crossing glistening crosswalks during an evening spring drizzle, with taxi lights washing over the wet asphalt.",
-    location: "Gangnam, Seoul, South Korea",
+    title: "Dhauladhar Pine Forest Mist",
+    description: "High mountain forest pine ridges beneath the towering, snow-covered granite walls of the Dhauladhar Range in upper Himachal.",
+    location: "Dhauladhar Range, Dharamshala, Himachal Pradesh, India",
     camera: "Fujifilm X-Pro3",
-    lens: "Fujinon XF 35mm f/2 R WR",
-    settings: "1/160s • f/2.0 • ISO 640 • 35mm",
-    date: "April 2025",
-    tags: ["Rain", "Seoul", "Umbrellas", "CityLife", "Street"],
+    lens: "Fujinon XF 23mm f/2 R WR",
+    settings: "1/250s • f/4.0 • ISO 200 • 23mm",
+    date: "September 2025",
+    tags: ["Himachal", "Dharamshala", "PineForest", "Mist", "Himalayas", "Nature"],
+  },
+
+  // 🏔️ Himalayas & Deserts
+  22: {
+    title: "Pangong Tso & Ladakh Highlands",
+    description: "The mesmerizing deep cobalt and turquoise waters of Pangong Tso extending across high-altitude Himalayan mountain deserts beneath bright alpine clouds.",
+    location: "Pangong Tso, Ladakh, India",
+    camera: "Sony Alpha A7R IV",
+    lens: "Sony FE 16-35mm f/2.8 GM",
+    settings: "1/800s • f/9.0 • ISO 100 • 24mm",
+    date: "July 2025",
+    tags: ["Ladakh", "PangongLake", "Himalayas", "HighAltitude", "Deserts"],
   },
   23: {
-    description: "The quiet, solitary atmosphere of an illuminated 24-hour city diner viewed from across the street in the quiet early hours before dawn.",
-    location: "East Village, New York City, USA",
-    camera: "Leica M11",
-    lens: "Summicron-M 50mm f/2",
-    settings: "1/60s • f/2.0 • ISO 1250 • 50mm",
-    date: "November 2025",
-    tags: ["NightShift", "Diner", "Moody", "Nocturnal", "NYC"],
+    title: "Key Monastery on Spiti Cliff",
+    description: "The 1000-year-old Key Gompa monastery perched dramatically like a fortress on a remote rocky hill in the cold high desert of Spiti Valley.",
+    location: "Spiti Valley, Himachal Pradesh, India",
+    camera: "Nikon Z6 II",
+    lens: "NIKKOR Z 24-70mm f/4 S",
+    settings: "1/400s • f/7.1 • ISO 100 • 35mm",
+    date: "August 2025",
+    tags: ["SpitiValley", "KeyMonastery", "Buddhism", "Himalayas", "Himachal", "HighDesert"],
   },
   24: {
-    description: "A quiet Scandinavian interior bathed in soft diffused morning daylight, featuring a solitary wooden chair, linen drapery, and peaceful silence.",
-    location: "Stockholm Archipelago, Sweden",
-    camera: "Hasselblad 907X 50C",
-    lens: "XCD 38mm f/2.5 V",
-    settings: "1/125s • f/3.5 • ISO 200 • 38mm",
-    date: "February 2026",
-    tags: ["Interior", "Nordic", "Stillness", "Light", "Minimal"],
+    title: "Thar Desert Gold Sand Dunes",
+    description: "Endless golden wind-sculpted sand dunes of the Great Indian Thar Desert stretching out to the horizon under the vast amber skies of Jaisalmer.",
+    location: "Sam Sand Dunes, Jaisalmer, Rajasthan, India",
+    camera: "Leica Q3",
+    lens: "Summilux 28mm f/1.7 ASPH",
+    settings: "1/1000s • f/5.6 • ISO 100 • 28mm",
+    date: "October 2025",
+    tags: ["TharDesert", "Jaisalmer", "SandDunes", "Rajasthan", "Deserts"],
   },
+
+  // 🐅 Wildlife of India
   25: {
-    description: "A delicate ceramic vessel resting upon an aged natural slate surface beside a single fallen autumn maple leaf. A study in wabi-sabi and temporal beauty.",
-    location: "Nara, Japan",
-    camera: "Fujifilm X-T4",
-    lens: "Fujinon XF 56mm f/1.2 R",
-    settings: "1/200s • f/1.8 • ISO 160 • 56mm",
+    title: "Royal Bengal Tiger in Forest",
+    description: "A wild Royal Bengal Tiger striding silently through morning forest shadows in the ancient hunting grounds of the Maharajas in Ranthambore.",
+    location: "Ranthambore National Park, Sawai Madhopur, Rajasthan, India",
+    camera: "Sony Alpha A1",
+    lens: "Sony FE 200-600mm f/5.6-6.3 G OSS",
+    settings: "1/1000s • f/6.3 • ISO 640 • 500mm",
+    date: "March 2026",
+    tags: ["Tiger", "RoyalBengalTiger", "Ranthambore", "Wildlife", "India", "Forest"],
+  },
+  26: {
+    title: "Majestic Indian Peacock in Bloom",
+    description: "The national bird of India perched proudly with its iridescent sapphire and emerald plumage and elongated train feathers.",
+    location: "Keoladeo Ghana, Bharatpur, Rajasthan, India",
+    camera: "Nikon Z9",
+    lens: "NIKKOR Z 400mm f/2.8 TC VR S",
+    settings: "1/1600s • f/2.8 • ISO 400 • 400mm",
+    date: "July 2025",
+    tags: ["Peacock", "NationalBird", "Wildlife", "Bharatpur", "Rajasthan", "Feathers"],
+  },
+  27: {
+    title: "Wild Indian Tusker Elephant",
+    description: "A magnificent wild Indian tusker elephant emerging calmly from the dense tropical bamboo rainforest along the Periyar Lake shore.",
+    location: "Periyar Tiger Reserve, Thekkady, Kerala, India",
+    camera: "Canon EOS R3",
+    lens: "Canon RF 100-500mm f/4.5-7.1L IS USM",
+    settings: "1/800s • f/5.6 • ISO 500 • 300mm",
+    date: "August 2025",
+    tags: ["Elephant", "Periyar", "Wildlife", "Kerala", "Rainforest", "Nature"],
+  },
+
+  // 🪔 Culture & Ghats
+  28: {
+    title: "Varanasi Morning on the Ganga",
+    description: "Morning prayers, sacred rituals, and floating earthen oil lamps greeting the rising sun over the timeless stone steps of the Varanasi ghats along the holy River Ganga.",
+    location: "Dashashwamedh Ghat, Varanasi, Uttar Pradesh, India",
+    camera: "Leica M11",
+    lens: "Summilux-M 35mm f/1.4 ASPH",
+    settings: "1/250s • f/2.0 • ISO 200 • 35mm",
     date: "November 2025",
-    tags: ["WabiSabi", "StillLife", "Zen", "Japan", "Simplicity"],
+    tags: ["Varanasi", "Ganga", "Ghats", "Spiritual", "Culture", "Sacred", "Kashi"],
+  },
+  29: {
+    title: "The Blue City of Jodhpur",
+    description: "The majestic Mehrangarh Fort rising high above the iconic azure and blue houses of old Jodhpur with the marble cenotaph of Jaswant Thada.",
+    location: "Brahmpuri, Jodhpur, Rajasthan, India",
+    camera: "Fujifilm X-T5",
+    lens: "Fujinon XF 16-55mm f/2.8 R LM WR",
+    settings: "1/500s • f/8.0 • ISO 125 • 35mm",
+    date: "February 2026",
+    tags: ["Jodhpur", "BlueCity", "Mehrangarh", "Rajasthan", "Culture", "Street"],
+  },
+  30: {
+    title: "Lake Palace & Pichola Waters",
+    description: "The majestic white marble palaces of Lake Pichola glowing against the velvet evening waters and Aravalli mountain silhouettes in Udaipur.",
+    location: "Lake Pichola, Udaipur, Rajasthan, India",
+    camera: "Canon EOS R6 Mark II",
+    lens: "Canon RF 70-200mm f/2.8L IS USM",
+    settings: "1/100s • f/3.5 • ISO 500 • 85mm",
+    date: "November 2025",
+    tags: ["Udaipur", "LakePalace", "Rajasthan", "Royal", "Sunset", "Culture"],
+  },
+  31: {
+    title: "Howrah Bridge Over Sacred Hooghly",
+    description: "The cantilevered steel giant of Howrah Bridge soaring over the sacred currents of the Hooghly River, carrying the energetic pulse and vintage soul of Kolkata.",
+    location: "Howrah Bridge, Kolkata, West Bengal, India",
+    camera: "Nikon Z7 II",
+    lens: "NIKKOR Z 14-30mm f/4 S",
+    settings: "1/160s • f/8.0 • ISO 200 • 16mm",
+    date: "January 2026",
+    tags: ["Kolkata", "HowrahBridge", "Bengal", "Culture", "HooghlyRiver", "Iconic"],
   },
 };
 
-/**
- * Returns complete enriched photo object with details, story, location, gear, and photographer.
- */
+// Title-based lookup table so photos fetched from MongoDB match even with MongoDB ObjectIds
+export const PHOTO_TITLE_MAP = {
+  "Harmandir Sahib · Golden Temple": PHOTO_METADATA_MAP[1],
+  "Kedarnath Temple & Garhwal Peaks": PHOTO_METADATA_MAP[2],
+  "Brihadeeswarar Ancient Chola Temple": PHOTO_METADATA_MAP[3],
+  "Meenakshi Amman Ancient Gopuram": PHOTO_METADATA_MAP[4],
+  "Konark Sun Temple & Black Pagoda": PHOTO_METADATA_MAP[5],
+  "Vittala Temple Stone Chariot": PHOTO_METADATA_MAP[6],
+  "Sacred Evening Ganga Aarti": PHOTO_METADATA_MAP[7],
+  "Taj Mahal at First Light": PHOTO_METADATA_MAP[8],
+  "Hawa Mahal · Palace of Winds": PHOTO_METADATA_MAP[9],
+  "India Gate War Memorial at Dusk": PHOTO_METADATA_MAP[10],
+  "Gateway of India & Arabian Sea": PHOTO_METADATA_MAP[11],
+  "Qutub Minar & Historic Ruins": PHOTO_METADATA_MAP[12],
+  "Amber Fort Palace & Aravalli Ridges": PHOTO_METADATA_MAP[13],
+  "Red Fort · Lal Qila": PHOTO_METADATA_MAP[14],
+  "Victoria Memorial Marble Palace": PHOTO_METADATA_MAP[15],
+  "Mysore Palace Illuminated Grandeur": PHOTO_METADATA_MAP[16],
+  "Kerala Backwaters Houseboat": PHOTO_METADATA_MAP[17],
+  "Munnar Emerald Tea Plantations": PHOTO_METADATA_MAP[18],
+  "Dal Lake Shikara in Morning Mist": PHOTO_METADATA_MAP[19],
+  "Palolem Palms & Arabian Sunset": PHOTO_METADATA_MAP[20],
+  "Dhauladhar Pine Forest Mist": PHOTO_METADATA_MAP[21],
+  "Pangong Tso & Ladakh Highlands": PHOTO_METADATA_MAP[22],
+  "Key Monastery on Spiti Cliff": PHOTO_METADATA_MAP[23],
+  "Thar Desert Gold Sand Dunes": PHOTO_METADATA_MAP[24],
+  "Royal Bengal Tiger in Forest": PHOTO_METADATA_MAP[25],
+  "Majestic Indian Peacock in Bloom": PHOTO_METADATA_MAP[26],
+  "Wild Indian Tusker Elephant": PHOTO_METADATA_MAP[27],
+  "Varanasi Morning on the Ganga": PHOTO_METADATA_MAP[28],
+  "The Blue City of Jodhpur": PHOTO_METADATA_MAP[29],
+  "Lake Palace & Pichola Waters": PHOTO_METADATA_MAP[30],
+  "Howrah Bridge Over Sacred Hooghly": PHOTO_METADATA_MAP[31],
+};
+
+// Fallback generator for uploaded or dynamically added photographs
 export const enrichPhotoWithDetails = (photo) => {
   if (!photo) return null;
 
-  const matched = PHOTO_METADATA_MAP[photo.id] || {};
-  const category = photo.category || "Photography";
-  const title = photo.title || "Untitled Photograph";
-  const author = photo.author || (photo.submittedBy ? `@${photo.submittedBy}` : "Photographer");
+  const metadata = PHOTO_METADATA_MAP[photo.id] || PHOTO_TITLE_MAP[photo.title];
+  if (metadata) {
+    return {
+      ...photo,
+      description: photo.description || metadata.description,
+      location: photo.location || metadata.location,
+      camera: photo.camera || metadata.camera,
+      lens: photo.lens || metadata.lens,
+      settings: photo.settings || metadata.settings,
+      date: photo.date || metadata.date,
+      tags: Array.isArray(photo.tags) && photo.tags.length > 0 ? photo.tags : metadata.tags,
+    };
+  }
 
-  // Fallbacks if not already specified in photo or mapped data
-  const fallbackDescriptions = {
-    Nature: `A captivating nature photograph capturing the raw atmosphere and natural beauty of "${title}". Framed to emphasize scenic textures and organic lighting.`,
-    Architecture: `An architectural composition exploring the structural lines, balance, and environmental context of "${title}".`,
-    Urban: `An evocative urban visual studying the energy, street culture, and temporal light around "${title}".`,
-    Minimal: `A minimalist artistic study focused on essential elements, negative space, and tonal subtlety in "${title}".`,
-  };
-
-  const fallbackLocations = {
-    Nature: "Scenic Wilderness & Outdoors",
-    Architecture: "Metropolitan District",
-    Urban: "Downtown City Center",
-    Minimal: "Artist Studio / Quiet Horizon",
-  };
-
-  const fallbackCameras = {
-    Nature: "Sony Alpha A7R IV",
-    Architecture: "Canon EOS R5",
-    Urban: "Fujifilm X-T4",
-    Minimal: "Leica Q2",
-  };
-
-  const fallbackLenses = {
-    Nature: "24-70mm f/2.8 GM",
-    Architecture: "16-35mm f/2.8 Ultra-Wide",
-    Urban: "35mm f/1.8 Prime",
-    Minimal: "50mm f/1.4 Art",
-  };
-
-  const fallbackSettings = {
-    Nature: "1/400s • f/8.0 • ISO 100",
-    Architecture: "1/320s • f/7.1 • ISO 100",
-    Urban: "1/160s • f/2.0 • ISO 400",
-    Minimal: "1/250s • f/4.0 • ISO 160",
-  };
-
-  const fallbackTags = {
-    Nature: ["Nature", "Outdoors", "FineArt", "Landscape"],
-    Architecture: ["Architecture", "Design", "Structure", "Lines"],
-    Urban: ["Urban", "Cityscape", "Street", "Atmosphere"],
-    Minimal: ["Minimal", "Simplicity", "Tone", "Art"],
-  };
-
-  const description =
-    photo.description ||
-    matched.description ||
-    fallbackDescriptions[category] ||
-    `A fine-art photograph showcasing "${title}", thoughtfully captured by ${author}.`;
-
-  const location =
-    photo.location ||
-    matched.location ||
-    fallbackLocations[category] ||
-    "Global Photography Studio";
-
-  const camera =
-    photo.camera ||
-    matched.camera ||
-    fallbackCameras[category] ||
-    "Professional Digital Camera";
-
-  const lens =
-    photo.lens ||
-    matched.lens ||
-    fallbackLenses[category] ||
-    "Standard Prime Lens";
-
-  const settings =
-    photo.settings ||
-    matched.settings ||
-    fallbackSettings[category] ||
-    "1/250s • f/5.6 • ISO 100";
-
-  const date =
-    photo.date ||
-    matched.date ||
-    (photo.createdAt ? new Date(photo.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long" }) : "Recent");
-
-  const tags =
-    (photo.tags && photo.tags.length > 0)
-      ? photo.tags
-      : (matched.tags || fallbackTags[category] || ["Photography", "Gallery"]);
-
+  // Fallback defaults for user-uploaded Indian photographs
   return {
     ...photo,
-    description,
-    location,
-    camera,
-    lens,
-    settings,
-    date,
-    tags,
-    author,
+    description:
+      photo.description ||
+      `An expressive fine-art capture titled "${photo.title}". Photographed by ${photo.author || "Artist"} highlighting authentic Indian landscapes, temples, heritage, and culture.`,
+    location: photo.location || "India",
+    camera: photo.camera || "Sony Alpha Full-Frame",
+    lens: photo.lens || "24-70mm f/2.8 Lens",
+    settings: photo.settings || "1/250s • f/5.6 • ISO 200",
+    date: photo.date || "2025-2026",
+    tags: Array.isArray(photo.tags) && photo.tags.length > 0
+      ? photo.tags
+      : ["India", "IncredibleIndia", photo.category || "Exhibition"],
   };
 };

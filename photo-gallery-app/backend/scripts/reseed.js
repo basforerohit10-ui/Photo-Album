@@ -1,125 +1,13 @@
 import "dotenv/config";
-import express from "express";
-import cors from "cors";
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const uris = [
+  process.env.MONGODB_URI,
+  "mongodb://127.0.0.1:27017/photo-gallery-app",
+  "mongodb://127.0.0.1:27017/photo_gallery",
+].filter(Boolean);
 
-const app = express();
-const port = Number(process.env.PORT || 5000);
-const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/photo_gallery";
-const jwtSecret = process.env.JWT_SECRET || "photo_gallery_jwt_secret_key_845a144c19e046c3b092e8631a7cc218";
-const adminSecurityKey = process.env.ADMIN_SECRET_KEY || "2005";
-const adminUsername = (process.env.ADMIN_USERNAME || "admin").trim().toLowerCase();
-const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
-
-if (!process.env.MONGODB_URI) {
-  console.warn("WARNING: MONGODB_URI not set. Using local fallback mongodb://127.0.0.1:27017/photo_gallery. For cloud deployment, set MONGODB_URI to your MongoDB Atlas connection string.");
-}
-
-// Robust CORS allowing local development, Vercel, Render, Railway and configured origins
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      const configuredOrigins = (process.env.CLIENT_ORIGIN || "")
-        .split(",")
-        .map((o) => o.trim())
-        .filter(Boolean);
-
-      const defaultAllowed = [
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://localhost:5000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:5000",
-      ];
-
-      const isAllowed =
-        configuredOrigins.includes("*") ||
-        configuredOrigins.includes(origin) ||
-        defaultAllowed.includes(origin) ||
-        origin.endsWith(".vercel.app") ||
-        origin.endsWith(".onrender.com") ||
-        origin.endsWith(".railway.app") ||
-        origin.endsWith(".netlify.app");
-
-      if (isAllowed) return callback(null, true);
-      return callback(null, true);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
-);
-
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use("/images", express.static(path.join(__dirname, "../frontend/public/images")));
-
-// Route normalizer for serverless environments (e.g. if Vercel strips /api prefix)
-app.use((req, res, next) => {
-  if (!req.url.startsWith("/api") && !req.url.startsWith("/images")) {
-    const apiRoutes = ["/health", "/auth/register", "/auth/login", "/admin/users", "/photos", "/admin/photos"];
-    if (apiRoutes.some((r) => req.url.startsWith(r))) {
-      req.url = `/api${req.url}`;
-    }
-  }
-  next();
-});
-
-// Middleware to ensure DB connection on API requests
-app.use(async (req, res, next) => {
-  if (req.path.startsWith("/api")) {
-    try {
-      await ensureConnected();
-    } catch (err) {
-      console.error("Database connection error on API request:", err.message);
-      return res.status(503).json({
-        message: "Database connection failed. Please check MONGODB_URI in your cloud deployment settings.",
-        error: err.message,
-      });
-    }
-  }
-  next();
-});
-
-const userSchema = new mongoose.Schema(
-  {
-    fullName: { type: String, required: true, trim: true },
-    username: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    passwordHash: { type: String, required: true },
-    role: { type: String, enum: ["user", "admin"], default: "user" },
-  },
-  { timestamps: true }
-);
-
-const photoSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true, trim: true },
-    url: { type: String, required: true, trim: true },
-    category: { type: String, required: true, trim: true },
-    author: { type: String, required: true, trim: true },
-    submittedBy: { type: String, required: true, trim: true },
-    description: { type: String, default: "", trim: true },
-    location: { type: String, default: "", trim: true },
-    camera: { type: String, default: "", trim: true },
-    lens: { type: String, default: "", trim: true },
-    settings: { type: String, default: "", trim: true },
-    tags: { type: [String], default: [] },
-    status: { type: String, enum: ["pending", "approved"], default: "pending" },
-    isFavorite: { type: Boolean, default: false },
-  },
-  { timestamps: true }
-);
-
-const User = mongoose.model("User", userSchema);
-const Photo = mongoose.model("Photo", photoSchema);
+const uniqueUris = [...new Set(uris)];
 
 const initialPhotos = [
   // 🛕 Temples & Spiritual
@@ -538,354 +426,88 @@ const initialPhotos = [
   },
 ];
 
-const serializePhoto = (photo) => ({
-  id: photo._id.toString(),
-  title: photo.title,
-  url: photo.url,
-  category: photo.category,
-  author: photo.author,
-  submittedBy: photo.submittedBy,
-  description: photo.description || "",
-  location: photo.location || "",
-  camera: photo.camera || "",
-  lens: photo.lens || "",
-  settings: photo.settings || "",
-  tags: photo.tags || [],
-  status: photo.status,
-  isFavorite: photo.isFavorite,
-  createdAt: photo.createdAt,
-});
-
-const createToken = (user) => jwt.sign(
-  { id: user._id.toString(), role: user.role, username: user.username },
-  jwtSecret,
-  { expiresIn: "7d" }
+const photoSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    url: { type: String, required: true, trim: true },
+    category: { type: String, required: true, trim: true },
+    author: { type: String, required: true, trim: true },
+    submittedBy: { type: String, required: true, trim: true },
+    description: { type: String, default: "", trim: true },
+    location: { type: String, default: "", trim: true },
+    camera: { type: String, default: "", trim: true },
+    lens: { type: String, default: "", trim: true },
+    settings: { type: String, default: "", trim: true },
+    tags: { type: [String], default: [] },
+    status: { type: String, enum: ["pending", "approved"], default: "pending" },
+    isFavorite: { type: Boolean, default: false },
+  },
+  { timestamps: true }
 );
 
-const requireAuth = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    if (!token) return res.status(401).json({ message: "Authentication required." });
-
-    const payload = jwt.verify(token, jwtSecret);
-    const user = await User.findById(payload.id).select("fullName username role");
-    if (!user) return res.status(401).json({ message: "User session is no longer valid." });
-
-    req.user = user;
-    next();
-  } catch {
-    res.status(401).json({ message: "Authentication required." });
-  }
-};
-
-const requireAdmin = (req, res, next) => {
-  if (req.user.role !== "admin") return res.status(403).json({ message: "Admin access required." });
-  next();
-};
-
-// Root route
-app.get("/", (_req, res) => {
-  res.json({ message: "Photo Gallery API is running successfully!" });
-});
-
-app.get("/api/health", (_req, res) => res.json({ ok: true }));
-
-app.post("/api/auth/register", async (req, res) => {
-  try {
-    const fullName = req.body.fullName?.trim();
-    const username = req.body.username?.trim().toLowerCase();
-    const password = req.body.password;
-    if (!fullName || !username || !password) {
-      return res.status(400).json({ message: "Please fill in all fields." });
-    }
-    if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters." });
-    }
-    if (await User.exists({ username })) {
-      return res.status(409).json({ message: "This username is already taken." });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ fullName, username, passwordHash, role: "user" });
-    res.status(201).json({
-      message: "Registration successful. Please log in.",
-      role: "user",
-    });
-  } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: error.message || "Unable to register right now." });
-  }
-});
-
-app.post("/api/admin/users", requireAuth, requireAdmin, async (req, res) => {
-  try {
-    const fullName = req.body.fullName?.trim();
-    const username = req.body.username?.trim().toLowerCase();
-    const password = req.body.password;
-
-    if (!fullName || !username || !password) {
-      return res.status(400).json({ message: "Please fill in all fields." });
-    }
-    if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters." });
-    }
-    if (await User.exists({ username })) {
-      return res.status(409).json({ message: "This username is already taken." });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ fullName, username, passwordHash, role: "admin" });
-    res.status(201).json({ message: "Admin account created successfully.", role: "admin" });
-  } catch (error) {
-    console.error("Admin registration error:", error);
-    res.status(500).json({ message: error.message || "Unable to create admin account." });
-  }
-});
-
-app.post("/api/auth/login", async (req, res) => {
-  try {
-    const username = req.body.username?.trim().toLowerCase();
-    const user = await User.findOne({ username });
-    if (!user || !(await bcrypt.compare(req.body.password || "", user.passwordHash))) {
-      return res.status(401).json({ message: "Invalid username or password." });
-    }
-    if (user.role === "admin" && req.body.adminSecurityKey !== adminSecurityKey) {
-      return res.status(401).json({ message: "Invalid Admin Security Key." });
-    }
-
-    res.json({
-      token: createToken(user),
-      user: { id: user._id.toString(), fullName: user.fullName, username: user.username, role: user.role },
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Unable to log in right now.", error: error.message });
-  }
-});
-
-app.get("/api/photos", async (_req, res) => {
-  try {
-    const photos = await Photo.find({ status: "approved" }).sort({ createdAt: -1 });
-    res.json(photos.map(serializePhoto));
-  } catch (error) {
-    res.status(500).json({ message: "Unable to load gallery photos.", error: error.message });
-  }
-});
-
-app.get("/api/photos/mine", requireAuth, async (req, res) => {
-  try {
-    const photos = await Photo.find({ submittedBy: req.user.username }).sort({ createdAt: -1 });
-    res.json(photos.map(serializePhoto));
-  } catch (error) {
-    res.status(500).json({ message: "Unable to load your uploaded photos.", error: error.message });
-  }
-});
-
-app.post("/api/photos", requireAuth, async (req, res) => {
-  try {
-    const { title, url, category, description, location, camera, lens, settings, tags } = req.body || {};
-    if (!title?.trim() || !url?.trim() || !category?.trim()) {
-      return res.status(400).json({ message: "Title, category, and image URL/data are required." });
-    }
-
-    const author = (req.body.author && req.body.author.trim())
-      || (req.user && req.user.fullName)
-      || (req.user && req.user.username)
-      || "Photographer";
-
-    const submittedBy = (req.user && req.user.username) || "user";
-    const status = (req.user && req.user.role === "admin") ? "approved" : "pending";
-
-    const photo = await Photo.create({
-      title: title.trim(),
-      url: url.trim(),
-      category: category.trim(),
-      author,
-      submittedBy,
-      description: description ? description.trim() : "",
-      location: location ? location.trim() : "",
-      camera: camera ? camera.trim() : "",
-      lens: lens ? lens.trim() : "",
-      settings: settings ? settings.trim() : "",
-      tags: Array.isArray(tags) ? tags : [],
-      status,
-    });
-    res.status(201).json(serializePhoto(photo));
-  } catch (error) {
-    console.error("Submit photo error:", error);
-    res.status(500).json({ message: error.message || "Unable to submit photo." });
-  }
-});
-
-app.get("/api/admin/photos/pending", requireAuth, requireAdmin, async (_req, res) => {
-  const photos = await Photo.find({ status: "pending" }).sort({ createdAt: -1 });
-  res.json(photos.map(serializePhoto));
-});
-
-app.patch("/api/admin/photos/:id/approve", requireAuth, requireAdmin, async (req, res) => {
-  const photo = await Photo.findOneAndUpdate(
-    { _id: req.params.id, status: "pending" },
-    { status: "approved" },
-    { new: true }
-  );
-  if (!photo) return res.status(404).json({ message: "Pending photo not found." });
-  res.json(serializePhoto(photo));
-});
-
-app.delete("/api/admin/photos/:id", requireAuth, requireAdmin, async (req, res) => {
-  const photo = await Photo.findByIdAndDelete(req.params.id);
-  if (!photo) return res.status(404).json({ message: "Photo not found." });
-  res.json({ message: "Photo deleted." });
-});
-
-const seedDatabase = async () => {
-  const adminUsername = process.env.ADMIN_USERNAME.toLowerCase();
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  const adminExists = await User.exists({ username: adminUsername });
-
-  if (!adminExists) {
-    await User.create({
-      fullName: "Admin User",
-      username: adminUsername,
-      passwordHash: await bcrypt.hash(adminPassword, 12),
-      role: "admin",
-    });
-    console.log(`Seeded admin account: ${adminUsername}`);
-  }
-
-  // Clean up legacy non-Indian default demo photos and outdated unsplash links if present
-  const oldTitles = [
-    "Alpine Peaks", "Minimal Concrete", "Neon Streets", "Misty Pine Forest",
-    "Desert Solitude", "Coastal Drift", "City in Motion", "Quiet Horizon",
-    "Forest Lines", "Glass Tower", "Golden Shore", "First Light",
-    "Mountain Weather", "Blue Hour Lake", "Ocean Air", "Wildflower Season",
-    "Alpine Meadow", "Quiet Geometry", "White Concrete", "Built in Lines",
-    "City in Rain", "Night Shift", "Room for Thought", "A Study in Stillness",
-    "Taj Sunset & River Yamuna Reflections", "Ganga Morning Boats & Prayers", "Qutub Minar & Mughal Heritage"
-  ];
-  const oldCleanup = await Photo.deleteMany({
-    $or: [
-      { title: { $in: oldTitles } },
-      { url: { $regex: "unsplash" } },
-    ],
-  });
-  if (oldCleanup.deletedCount > 0) {
-    console.log(`Removed ${oldCleanup.deletedCount} old/unsplash demo photos.`);
-  }
-
-  const seedResult = await Photo.bulkWrite(
-    initialPhotos.map((item) => ({
-      updateOne: {
-        filter: { title: item.title },
-        update: {
-          $set: {
-            title: item.title,
-            url: item.url,
-            category: item.category,
-            author: item.author,
-            submittedBy: adminUsername,
-            description: item.description,
-            location: item.location,
-            camera: item.camera,
-            lens: item.lens,
-            settings: item.settings,
-            tags: item.tags,
-            isFavorite: item.isFavorite || false,
-            status: "approved",
-          },
-        },
-        upsert: true,
-      },
-    }))
-  );
-  if (seedResult.upsertedCount || seedResult.modifiedCount) {
-    console.log(`Seeded/Updated Indian gallery photos (Upserted: ${seedResult.upsertedCount}, Updated: ${seedResult.modifiedCount}).`);
-  }
-
-  const approvedPhotos = await Photo.find({ status: "approved" })
-    .sort({ createdAt: 1, _id: 1 })
-    .select("_id url")
-    .lean();
-  const seenImageUrls = new Set();
-  const duplicatePhotoIds = [];
-
-  for (const photo of approvedPhotos) {
-    let imageUrl = photo.url.trim();
+async function run() {
+  for (const uri of uniqueUris) {
     try {
-      const parsedUrl = new URL(imageUrl);
-      imageUrl = `${parsedUrl.origin}${parsedUrl.pathname}`;
-    } catch {
-      // Keep non-URL image values distinct by their exact string.
+      console.log(`Connecting to MongoDB at: ${uri}`);
+      const conn = await mongoose.createConnection(uri, { serverSelectionTimeoutMS: 5000 }).asPromise();
+      const Photo = conn.model("Photo", photoSchema);
+
+      // Clean up legacy unsplash and old demo photos
+      const oldTitles = [
+        "Alpine Peaks", "Minimal Concrete", "Neon Streets", "Misty Pine Forest",
+        "Desert Solitude", "Coastal Drift", "City in Motion", "Quiet Horizon",
+        "Forest Lines", "Glass Tower", "Golden Shore", "First Light",
+        "Mountain Weather", "Blue Hour Lake", "Ocean Air", "Wildflower Season",
+        "Alpine Meadow", "Quiet Geometry", "White Concrete", "Built in Lines",
+        "City in Rain", "Night Shift", "Room for Thought", "A Study in Stillness",
+        "Taj Sunset & River Yamuna Reflections", "Ganga Morning Boats & Prayers", "Qutub Minar & Mughal Heritage"
+      ];
+
+      const delResult = await Photo.deleteMany({
+        $or: [
+          { title: { $in: oldTitles } },
+          { url: { $regex: "unsplash" } },
+        ],
+      });
+      console.log(`[${uri}] Removed ${delResult.deletedCount} legacy/unsplash photos.`);
+
+      // Upsert all 31 verified Indian photos
+      const ops = initialPhotos.map((item) => ({
+        updateOne: {
+          filter: { title: item.title },
+          update: {
+            $set: {
+              title: item.title,
+              url: item.url,
+              category: item.category,
+              author: item.author,
+              submittedBy: "admin",
+              description: item.description,
+              location: item.location,
+              camera: item.camera,
+              lens: item.lens,
+              settings: item.settings,
+              tags: item.tags,
+              isFavorite: item.isFavorite || false,
+              status: "approved",
+            },
+          },
+          upsert: true,
+        },
+      }));
+
+      const bulkResult = await Photo.bulkWrite(ops);
+      console.log(`[${uri}] Seeded/Updated verified Indian photos. Upserted: ${bulkResult.upsertedCount}, Modified: ${bulkResult.modifiedCount}`);
+
+      const totalApproved = await Photo.countDocuments({ status: "approved" });
+      console.log(`[${uri}] Total approved photos now: ${totalApproved}`);
+
+      await conn.close();
+    } catch (err) {
+      console.error(`Failed on URI ${uri}:`, err.message);
     }
-    if (seenImageUrls.has(imageUrl)) duplicatePhotoIds.push(photo._id);
-    else seenImageUrls.add(imageUrl);
   }
-
-  if (duplicatePhotoIds.length) {
-    const result = await Photo.deleteMany({ _id: { $in: duplicatePhotoIds } });
-    console.log(`Removed ${result.deletedCount} duplicate approved gallery photos.`);
-  }
-};
-
-let isConnected = false;
-let isConnecting = false;
-
-export const ensureConnected = async () => {
-  if (mongoose.connection.readyState === 1) {
-    return;
-  }
-  if (!mongoUri) {
-    throw new Error("MONGODB_URI is not defined.");
-  }
-  if (isConnecting) {
-    while (isConnecting) {
-      await new Promise((resolve) => setTimeout(resolve, 80));
-    }
-    return;
-  }
-
-  isConnecting = true;
-  try {
-    await mongoose.connect(mongoUri, {
-      maxPoolSize: 10,
-      serverSelectionTimeoutMS: 8000,
-    });
-    console.log("Connected to MongoDB successfully.");
-    await seedDatabase();
-    isConnected = true;
-  } catch (err) {
-    console.error("Database connection failure:", err.message);
-    throw err;
-  } finally {
-    isConnecting = false;
-  }
-};
-
-// Serve built frontend for fullstack production deployment (Render / Railway / VPS)
-const distPath = path.join(__dirname, "../frontend/dist");
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
-  app.use((req, res, next) => {
-    if (req.method !== "GET") return next();
-    if (req.path.startsWith("/api") || req.path.startsWith("/images")) {
-      return next();
-    }
-    res.sendFile(path.join(distPath, "index.html"));
-  });
+  process.exit(0);
 }
 
-// In local and dedicated server deployments, start listening
-const isVercelServerless = Boolean(process.env.VERCEL || process.env.NOW_REGION);
-if (!isVercelServerless && process.env.NODE_ENV !== "test") {
-  ensureConnected()
-    .then(() => {
-      app.listen(port, () => console.log(`API running at http://localhost:${port}`));
-    })
-    .catch((error) => {
-      console.warn("MongoDB initial connection error:", error.message);
-      app.listen(port, () =>
-        console.log(`API running at http://localhost:${port} (MongoDB connection pending: ${error.message})`)
-      );
-    });
-}
-
-export default app;
+run();

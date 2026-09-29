@@ -4,15 +4,17 @@ import PhotoCard from "../components/PhotoCard";
 import PhotoDetailModal from "../components/PhotoDetailModal";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { CATEGORY_ICONS } from "../data/photoDetails";
 
 const TRENDING_TAGS = [
-  { label: "🏔️ Alpine", query: "Alpine" },
-  { label: "🗼 Tokyo", query: "Tokyo" },
-  { label: "🌅 Golden Hour", query: "Golden" },
-  { label: "🌲 Forest", query: "Forest" },
-  { label: "🏛️ Brutalism", query: "Concrete" },
-  { label: "🌊 Ocean", query: "Coast" },
-  { label: "📷 Sony", query: "Sony" },
+  { label: "🛕 Golden Temple", query: "Golden Temple" },
+  { label: "🕌 Taj Mahal", query: "Taj" },
+  { label: "🕉️ Varanasi Ghats", query: "Varanasi" },
+  { label: "⛰️ Kedarnath", query: "Kedarnath" },
+  { label: "🏰 Hawa Mahal", query: "Hawa Mahal" },
+  { label: "🌴 Kerala Backwaters", query: "Kerala" },
+  { label: "🏔️ Ladakh & Spiti", query: "Ladakh" },
+  { label: "🐅 Royal Bengal Tiger", query: "Tiger" },
 ];
 
 const Gallery = ({ photos, setPhotos, onDeletePhoto }) => {
@@ -129,18 +131,18 @@ const Gallery = ({ photos, setPhotos, onDeletePhoto }) => {
         <div className="gallery-hero-copy">
           <div className="hero-status-pill">
             <span className="pulse-dot" />
-            <span>FINE ART PHOTOGRAPHY ARCHIVE</span>
+            <span>INCREDIBLE INDIA PHOTOGRAPHY ARCHIVE</span>
             <span className="pill-divider">•</span>
             <span className="pill-edition">CURATED 2026</span>
           </div>
 
           <h1 className="hero-heading">
-            Places, people<br />
-            and <em>passing light.</em>
+            Temples, Heritage<br />
+            and <em>Sacred Lands.</em>
           </h1>
 
           <p className="gallery-hero-intro">
-            A handpicked exhibition of moments, quiet horizons, and human stories captured through the lens of dedicated creators across the globe.
+            A handpicked fine-art exhibition of India's iconic monuments, ancient temples, magnificent wildlife, and breathtaking natural wonders captured across the subcontinent.
           </p>
 
           <div className="hero-actions-row">
@@ -243,7 +245,7 @@ const Gallery = ({ photos, setPhotos, onDeletePhoto }) => {
               id="gallery-search-input"
               type="text"
               className="aesthetic-search-input"
-              placeholder="Search by title, location, creator, camera, tags (e.g. Alpine, Tokyo, Sony, Rain)..."
+              placeholder="Search by temple, monument, state, camera, tags (e.g. Taj Mahal, Varanasi, Kedarnath, Kerala, Sony)..."
               aria-label="Search photographs"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
@@ -304,6 +306,9 @@ const Gallery = ({ photos, setPhotos, onDeletePhoto }) => {
                 onClick={() => setSelectedCategory(category)}
                 aria-selected={selectedCategory === category}
               >
+                <span className="category-pill-icon" aria-hidden="true">
+                  {CATEGORY_ICONS[category] || "📷"}
+                </span>
                 <span>{category}</span>
                 <span className="category-count-badge">
                   {categoryCounts[category] || 0}

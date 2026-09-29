@@ -44,20 +44,78 @@ const Login = ({ initialMode }) => {
     }
   };
 
+  const handleBack = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate("/gallery");
+    }
+  };
+
   return (
     <div style={styles.page} className="studio-auth-page">
-      <div style={styles.container} className="studio-auth-layout">
-        <aside className="studio-auth-aside">
-          <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
-          <div>
-            <h1>Good photographs<br />stay with you.</h1>
-            <p>Sign in to explore the collection and share your own point of view.</p>
-          </div>
-          <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
-        </aside>
-        <div style={styles.box} className="studio-auth-card">
-          {/* Mode Tabs */}
-          <div style={styles.tabBar}>
+      <div className="studio-auth-shell" style={styles.shell}>
+        <div style={styles.topBar} className="studio-back-nav-bar">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="studio-back-btn"
+            style={styles.backBtn}
+            title="Return to the gallery"
+          >
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Back to Gallery</span>
+          </button>
+        </div>
+
+        <div style={styles.container} className="studio-auth-layout">
+          <aside className="studio-auth-aside">
+            <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
+            <div>
+              <h1>Good photographs<br />stay with you.</h1>
+              <p>Sign in to explore the collection and share your own point of view.</p>
+            </div>
+            <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
+          </aside>
+          <div style={styles.box} className="studio-auth-card">
+            {/* Card-level Back Button */}
+            <button
+              type="button"
+              onClick={handleBack}
+              className="studio-card-back-btn"
+              style={styles.cardBackBtn}
+              title="Return to the gallery"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Back to Gallery</span>
+            </button>
+
+            {/* Mode Tabs */}
+            <div style={styles.tabBar}>
             <button
               type="button"
               onClick={() => { setModeOverride(false); setError(""); }}
@@ -188,6 +246,7 @@ const Login = ({ initialMode }) => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
