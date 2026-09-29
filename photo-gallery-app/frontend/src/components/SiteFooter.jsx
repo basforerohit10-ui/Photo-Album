@@ -231,7 +231,7 @@ const SiteFooter = () => {
           <span>•</span>
           <a href="https://500px.com" target="_blank" rel="noopener noreferrer">500px</a>
           <span>•</span>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+          <a href="https://x.com/basforerohit200" target="_blank" rel="noopener noreferrer">Twitter / X</a>
           <span>•</span>
           <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
