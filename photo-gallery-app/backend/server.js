@@ -1028,13 +1028,17 @@ const isVercelServerless = Boolean(process.env.VERCEL || process.env.NOW_REGION)
 if (!isVercelServerless && process.env.NODE_ENV !== "test") {
   ensureConnected()
     .then(() => {
-      app.listen(port, () => console.log(`API running at http://localhost:${port}`));
+      app.listen(port, () => {
+        console.log(`API running at http://localhost:${port}`);
+        console.log(`Live Vercel App: https://photo-album-18.vercel.app`);
+      });
     })
     .catch((error) => {
       console.warn("MongoDB initial connection error:", error.message);
-      app.listen(port, () =>
-        console.log(`API running at http://localhost:${port} (MongoDB connection pending: ${error.message})`)
-      );
+      app.listen(port, () => {
+        console.log(`API running at http://localhost:${port} (MongoDB connection pending: ${error.message})`);
+        console.log(`Live Vercel App: https://photo-album-18.vercel.app`);
+      });
     });
 }
 

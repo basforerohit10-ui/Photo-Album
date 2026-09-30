@@ -1,5 +1,10 @@
 # Rohit Photostudio
 
+🌐 **Live Website (Vercel):** [https://photo-album-18.vercel.app](https://photo-album-18.vercel.app)  
+📂 **GitHub Repository:** [https://github.com/basforerohit10-ui/Photo-Album](https://github.com/basforerohit10-ui/Photo-Album)
+
+---
+
 The repository is organized into a `frontend/` Vite app and a `backend/` Express API.
 
 ## MongoDB setup
