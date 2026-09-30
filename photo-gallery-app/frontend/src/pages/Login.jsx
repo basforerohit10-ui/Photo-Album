@@ -188,7 +188,7 @@ const Login = ({ initialMode }) => {
 
               {isAdminMode && (
                 <div style={styles.field}>
-                  <label style={styles.adminKeyLabel}>Admin Security Key</label>
+                  <label style={styles.adminKeyLabel}>Admin Security Passkey *</label>
                   <input
                     type="password"
                     name="adminSecurityKey"
@@ -223,13 +223,9 @@ const Login = ({ initialMode }) => {
             <div style={styles.footerLinks}>
               <p style={styles.helper}>
                 Don&apos;t have an account?{" "}
-                {isAdminMode ? (
-                  <span style={styles.adminRegisterLink}>Administrator accounts are provisioned by the site owner.</span>
-                ) : (
-                  <Link to="/register" style={styles.link}>
-                    Register as Contributor
-                  </Link>
-                )}
+                <Link to="/register" style={styles.link}>
+                  Register here
+                </Link>
               </p>
               {isAdminMode && (
                 <p style={styles.subHelper}>

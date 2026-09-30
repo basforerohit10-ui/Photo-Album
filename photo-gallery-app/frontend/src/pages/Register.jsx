@@ -89,7 +89,11 @@ const Register = ({ adminMode = false }) => {
             <span className="studio-aside-kicker">ROHIT PHOTOSTUDIO</span>
             <div>
               <h1>Make room<br />for your vision.</h1>
-              <p>{isAdminRegister ? "Create an administrator account with studio management privileges." : "Join the collection and share photographs that see the world your way."}</p>
+              <p>
+                {adminMode && isAdminRegister
+                  ? "Create an administrator account with studio management privileges."
+                  : "Join the collection and share photographs that see the world your way."}
+              </p>
             </div>
             <span className="studio-aside-caption">THE PHOTOGRAPHY COLLECTION</span>
           </aside>
@@ -117,36 +121,44 @@ const Register = ({ adminMode = false }) => {
               <span>{adminMode ? "Back to Admin" : "Back"}</span>
             </button>
 
-            {/* Mode Switch Tabs: Contributor vs Admin */}
-            <div style={styles.tabBar}>
-              <button
-                type="button"
-                onClick={() => { setIsAdminRegister(false); setMessage(""); }}
-                style={{
-                  ...styles.tabBtn,
-                  ...(!isAdminRegister ? styles.tabBtnActive : {}),
-                }}
-              >
-                Contributor Account
-              </button>
-              <button
-                type="button"
-                onClick={() => { setIsAdminRegister(true); setMessage(""); }}
-                style={{
-                  ...styles.tabBtn,
-                  ...(isAdminRegister ? styles.adminTabBtnActive : {}),
-                }}
-              >
-                🛡️ Admin Account
-              </button>
-            </div>
+            {/* Mode Switch Tabs: Only shown if inside internal admin panel */}
+            {adminMode && (
+              <div style={styles.tabBar}>
+                <button
+                  type="button"
+                  onClick={() => { setIsAdminRegister(false); setMessage(""); }}
+                  style={{
+                    ...styles.tabBtn,
+                    ...(!isAdminRegister ? styles.tabBtnActive : {}),
+                  }}
+                >
+                  Contributor Account
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setIsAdminRegister(true); setMessage(""); }}
+                  style={{
+                    ...styles.tabBtn,
+                    ...(isAdminRegister ? styles.adminTabBtnActive : {}),
+                  }}
+                >
+                  🛡️ Admin Account
+                </button>
+              </div>
+            )}
 
             <div style={styles.headerBox}>
-              {isAdminRegister && (
+              {adminMode && isAdminRegister && (
                 <span style={styles.adminBadge}>ADMIN PRIVILEGES</span>
               )}
-              <h2 style={styles.title}>{isAdminRegister ? "Register as Administrator" : "Create account"}</h2>
-              <p style={styles.sub}>{isAdminRegister ? "Set up your admin name, username, password and enter your secret passkey." : "Join the gallery community and submit your photography as a contributor."}</p>
+              <h2 style={styles.title}>
+                {adminMode && isAdminRegister ? "Register as Administrator" : "Create Account"}
+              </h2>
+              <p style={styles.sub}>
+                {adminMode && isAdminRegister
+                  ? "Set up admin name, username, password and enter your secret passkey."
+                  : "Join the gallery community and submit your photography as a contributor."}
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} style={styles.form}>
@@ -159,7 +171,7 @@ const Register = ({ adminMode = false }) => {
                   value={form.fullName}
                   onChange={handleChange}
                   required
-                  style={isAdminRegister ? { ...styles.input, ...styles.adminInput } : styles.input}
+                  style={adminMode && isAdminRegister ? { ...styles.input, ...styles.adminInput } : styles.input}
                 />
               </div>
 
@@ -168,11 +180,11 @@ const Register = ({ adminMode = false }) => {
                 <input
                   type="text"
                   name="username"
-                  placeholder={isAdminRegister ? "Choose admin username (e.g. rohit45)" : "Choose a username"}
+                  placeholder={adminMode && isAdminRegister ? "Choose admin username (e.g. rohit45)" : "Choose a username"}
                   value={form.username}
                   onChange={handleChange}
                   required
-                  style={isAdminRegister ? { ...styles.input, ...styles.adminInput } : styles.input}
+                  style={adminMode && isAdminRegister ? { ...styles.input, ...styles.adminInput } : styles.input}
                 />
               </div>
 
@@ -188,7 +200,7 @@ const Register = ({ adminMode = false }) => {
                     required
                     style={{
                       ...styles.passwordInput,
-                      ...(isAdminRegister ? styles.adminInput : {}),
+                      ...(adminMode && isAdminRegister ? styles.adminInput : {}),
                     }}
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} style={styles.passwordToggle}>
@@ -197,7 +209,8 @@ const Register = ({ adminMode = false }) => {
                 </div>
               </div>
 
-              {isAdminRegister && (
+              {/* Admin passkey is only shown if adminMode is explicitly enabled */}
+              {adminMode && isAdminRegister && (
                 <div style={styles.field}>
                   <label style={styles.adminKeyLabel}>Admin Security Passkey *</label>
                   <input
@@ -223,22 +236,22 @@ const Register = ({ adminMode = false }) => {
                 disabled={loading}
                 style={{
                   ...styles.btn,
-                  ...(isAdminRegister ? styles.adminBtn : {}),
+                  ...(adminMode && isAdminRegister ? styles.adminBtn : {}),
                   opacity: loading ? 0.7 : 1,
                 }}
               >
                 {loading
-                  ? "Processing..."
-                  : isAdminRegister
-                    ? "⚡ Register / Upgrade as Admin"
-                    : "Create Contributor Account"}
+                  ? "Creating Account..."
+                  : adminMode && isAdminRegister
+                    ? "⚡ Register as Admin"
+                    : "Create Account"}
               </button>
             </form>
 
             <p style={styles.helper}>
               Already have an account?{" "}
-              <Link to="/login" style={isAdminRegister ? styles.adminLoginLink : styles.link}>
-                {isAdminRegister ? "Sign in to Admin Portal" : "Login here"}
+              <Link to="/login" style={adminMode && isAdminRegister ? styles.adminLoginLink : styles.link}>
+                Login here
               </Link>
             </p>
           </div>
